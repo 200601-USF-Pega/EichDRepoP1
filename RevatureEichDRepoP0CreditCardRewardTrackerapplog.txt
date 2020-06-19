@@ -1,0 +1,21 @@
+2020-06-16 21:53:22 INFO  LogInService:29 - User test2 successfully logged in.
+2020-06-16 21:56:09 INFO  LogInService:29 - User root successfully logged in.
+2020-06-16 21:56:09 INFO  LogInService:41 - User root logged in as admin.true
+2020-06-16 21:58:20 INFO  LogInService:29 - User root successfully logged in.
+2020-06-16 21:58:20 INFO  LogInService:41 - User root logged in as admin? true
+2020-06-16 21:58:30 INFO  LogInService:29 - User null successfully logged in.
+2020-06-16 21:58:37 INFO  LogInService:29 - User dandan successfully logged in.
+2020-06-16 21:58:37 INFO  LogInService:41 - User dandan logged in as admin? false
+2020-06-16 22:16:13 INFO  LogInService:31 - User test2 successfully logged in.
+2020-06-16 22:16:29 INFO  LogInService:31 - User root successfully logged in.
+2020-06-16 22:16:29 INFO  LogInService:42 - User root logged in as an admin.
+2020-06-17 09:28:16 INFO  LogInService:31 - User null successfully logged in.
+2020-06-17 09:28:27 INFO  LogInService:31 - User jonathan successfully logged in.
+2020-06-17 09:28:27 INFO  LogInService:42 - User jonathan logged in as an admin.
+2020-06-17 09:28:47 INFO  LogInService:31 - User null successfully logged in.
+2020-06-17 09:28:53 INFO  LogInService:31 - User jonathan successfully logged in.
+2020-06-17 09:54:31 INFO  LogInService:31 - User jonathan successfully logged in.
+2020-06-17 10:38:03 INFO  LogInService:31 - User jonathan successfully logged in.
+2020-06-17 20:21:25 INFO  LogInService:31 - User test2 successfully logged in.
+2020-06-17 20:22:52 INFO  LogInService:31 - User jonathan successfully logged in.
+2020-06-19 12:58:16 INFO  LogInService:31 - User test2 successfully logged in.
