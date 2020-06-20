@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Transaction Record</title>
+    <title>Add Credit Card</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="CCRTMainStyle.css">
     <link rel="stylesheet" href="CCRTPageStyle.css">
@@ -16,32 +16,28 @@
         <a class="navbar-brand" href="#">Credit Card Reward Tracker</a>
       </div>
         <div><a href="#">Home</a></div>
-        <div><a href="addcard.html">Add Card</a></div>
-        <div class="active"><a href="addtransaction.html">Add Transaction</a></div>
+        <div class="active"><a href="addcard.html">Add Card</a></div>
+        <div><a href="addtransaction.html">Add Transaction</a></div>
         <div><a href="#">Manage Wallet</a></div>
         <div><a href="#">Manage Receipts</a></div>
         <div><a href="#">Log Out</a></div>
     </div>
   </nav>
-<h1>Add a New Transaction Record</h1>
+<h1>Add a New Credit Card</h1>
 <p></p>
 <form>
     <table>
         <tr>
-            <td><label for="cardid">Credit Card Used:</label></td>
-            <td><input type="radio" id="cardid" name="cardid" required></td>
+            <td><label for="cardname">Credit Card Name:</label></td>
+            <td><input type="text" id="cardname" name="cardname" maxlimit="100" required></td>
         </tr>
         <tr>
-            <td><label for="category">Category of Purchase:</label></td>
+            <td><label for="category">Rewards Category:</label></td>
             <td><input type="text" id="category" name="category" required></td>
         </tr>
         <tr>
-            <td><label for="purchasedate">Date of Purchase:</label></td>
-            <td><input type="date" id="purchasedate" name="purchasedate" required></td>
-        </tr>
-        <tr>
-            <td><label for="total">Total Spent: $</label></td>
-            <td><input type="number" id="total" name="total" min="0.00" required></td>
+            <td><label for="categoryrate">Rewards Rate (use decimal format):</label></td>
+            <td><input type="number" step="any" id="categoryrate" name="categoryrate" min="0.00" required></td>
         </tr>
     </table>
     <br>
