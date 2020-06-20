@@ -14,6 +14,15 @@ div {
     text-align: center;
 }
 
+.container-fluid {
+    color: #F2F2F2
+}
+
+.active {
+    color: #F2F2F2;
+    text-emphasis: bold;
+}
+
 p {
     padding-bottom: 20px;
 }
@@ -34,3 +43,4 @@ p {
     margin-right: auto;
     max-width: 75%;
 }
+
