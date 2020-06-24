@@ -48,7 +48,7 @@ public class CreditCardRewardService {
 		return Response.ok((ArrayList<CreditCardReward>)ccrr.getCashBackCategories(cardId)).build();
 	}
 	
-	
+	/*
 	public List<CreditCardReward> createNewCashbackCategory() {
 		
 		//Scanner cashScan = new Scanner(System.in);
@@ -185,5 +185,6 @@ public class CreditCardRewardService {
 		int categoryId = inputValidation.getValidInt();
 		return categoryId;
 	}
+	*/
 
 }

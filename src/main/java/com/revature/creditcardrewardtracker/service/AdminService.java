@@ -14,11 +14,11 @@ public class AdminService {
 	private InputValidationService inputValidation;
 	private ValidationService validation;
 	
-	public AdminService(Scanner sc, Connection connection) {
+	public AdminService(Scanner sc) {
 		this.sc = sc;
-		d = new UserRepoDB(connection);
+		d = new UserRepoDB();
 		inputValidation = new InputValidationService(sc);
-		validation = new ValidationService(connection);
+		validation = new ValidationService();
 	}
 	
 	public List<String> getAllUsers() {

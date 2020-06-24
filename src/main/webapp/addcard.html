@@ -8,9 +8,9 @@
     <link rel="stylesheet" href="CCRTMainStyle.css">
     <link rel="stylesheet" href="CCRTPageStyle.css">
 </head>
-<body>
- <!--Navigation bar adapted from: https://www.w3schools.com/bootstrap/bootstrap_navbar.asp-->
- <nav class="navbar navbar-inverse">
+<header>
+<!--Navigation bar adapted from: https://www.w3schools.com/bootstrap/bootstrap_navbar.asp-->
+<nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">Credit Card Reward Tracker</a>
@@ -23,9 +23,11 @@
         <div><a href="homepage.html">Log Out</a></div>
     </div>
   </nav>
+</header>
+<body>
 <h1>Add a New Credit Card</h1>
 <p></p>
-<form action="web/creditcardservice/{username}" method="post">
+<form action="/tracker/creditcardservice/{username}" method="post">
     <table class="bold">
         <tr>
             <td><label for="cardname">Credit Card Name:</label></td>

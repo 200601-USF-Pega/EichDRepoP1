@@ -60,6 +60,7 @@ public class CreditCardService {
 		return Response.ok((ArrayList<CreditCard>)d.getCreditCards(username)).build();
 	}
 	
+	/*
 	public void deleteCreditCard() {
 		System.out.println("Please enter the Card ID for the credit card you wish to delete.");
 		
@@ -106,5 +107,6 @@ public class CreditCardService {
 			} 
 		}
 	}
+	*/
 
 }

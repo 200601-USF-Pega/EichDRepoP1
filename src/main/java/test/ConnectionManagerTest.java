@@ -10,11 +10,13 @@ import com.revature.creditcardrewardtracker.web.ConnectionManager;
 
 class ConnectionManagerTest {
 
+	/*
 	@Test
 	void testConnectionManagerCreated() {
 		ConnectionManager manager = new ConnectionManager();
 		Connection connection = manager.start();
 		assertNotNull(connection);
 	}
+	*/
 
 }

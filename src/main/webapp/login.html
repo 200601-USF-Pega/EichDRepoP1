@@ -8,6 +8,22 @@
     <link rel="stylesheet" href="CCRTMainStyle.css">
     <link rel="stylesheet" href="CCRTLoginStyle.css">
 </head>
+<header>
+      <!--Navigation bar adapted from: https://www.w3schools.com/bootstrap/bootstrap_navbar.asp-->
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="#">Credit Card Reward Tracker</a>
+              </div>
+                <div><a href="#">Home</a></div>
+                <div class="active"><a href="addcard.html">Add Card</a></div>
+                <div><a href="addtransaction.html">Add Transaction</a></div>
+                <div><a href="#">Manage Wallet</a></div>
+                <div><a href="#">Manage Receipts</a></div>
+                <div><a href="homepage.html">Log Out</a></div>
+            </div>
+          </nav>
+</header>
 <body>
     <!--split screen style adapted from https://www.w3schools.com/howto/howto_css_split_screen.asp-->
     <div class="split left">
@@ -23,7 +39,7 @@
         <div class="leftalign">
             <h2>Log In</h2>
             <p>Please enter your log in information below.</p>
-            <form action="web/loginservice" method="get">
+            <form action="/tracker/LogInService" method="post">
                 <table>
                     <tr>
                         <td><label for="username">Username:</label></td>

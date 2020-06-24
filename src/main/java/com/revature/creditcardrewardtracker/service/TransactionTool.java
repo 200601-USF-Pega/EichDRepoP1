@@ -13,6 +13,8 @@ import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.Transaction;
 
 public class TransactionTool {
+	
+	private String username;
 
 	private ValidationService validation;
 	private ICreditCardRepo ccr;
@@ -20,6 +22,7 @@ public class TransactionTool {
 	public TransactionTool() {
 		validation = new ValidationService();
 		ccr = new CreditCardRepoDB();
+		username = "test2";
 	}
 
 	public Transaction createNewTransaction(int cardID, String htmlDate, String category, double total,
@@ -49,7 +52,40 @@ public class TransactionTool {
 		return transaction;
 
 	}
+	
+	private double calculateCashBack(Transaction transaction) {
+		int card = transaction.getCardID();
+		double rate = 0.0;
+		double everythingRate = 0.0;
 
+		double cashBack;
+
+		List<CreditCard> cardsOnFile = ccr.getCreditCards(username);
+
+		for (CreditCard cc : cardsOnFile) {
+			if (cc.getCreditCardID() == card) {
+				for (CreditCardReward cat : cc.getCardCashBackCategories()) {
+					if (cat.getCategoryOfCashBack().equalsIgnoreCase(transaction.getCategory())) {
+						rate = cat.getPercentageOfCashBack();
+						break;
+					} else if (cat.getCategoryOfCashBack().equalsIgnoreCase("everything")) {
+						everythingRate = cat.getPercentageOfCashBack();
+						break;
+					}
+				}
+			}
+		}
+
+		if (rate > everythingRate) {
+			cashBack = transaction.getTotal() * rate;
+		} else {
+			cashBack = transaction.getTotal() * everythingRate;
+		}
+
+		return cashBack;
+	}
+
+	/*
 	public List<Transaction> getUserTransactions() {
 		List<Transaction> list = d.listTransactions(username);
 		return list;
@@ -60,21 +96,14 @@ public class TransactionTool {
 	}
 
 	public void updateTransaction() {
-		d.printResultSet(username);
-		System.out.println("Please input the Transaction ID for the transaction to be updated.");
-		int id = inputValidation.getValidInt();
+		int id = null;
 		if (validation.permissionToModifyTransaction(username, id) == true) {
-			System.out.println("You selected Transaction ID " + id + " to modify. Enter YES to confirm.");
-			if (sc.next().equalsIgnoreCase("YES")) {
-				System.out.println("What would you like to update?");
-				System.out.println(
-						"Enter the option for what you'd like to modify: [1] Date; [2] Category; [3] Transaction Total; [4] CardID");
-				int option = inputValidation.getValidInt();
+				int option = null;
 				switch (option) {
 				case (1):
 					// date
 					System.out.println("What date would you like to change it to? Please use the YYYYMMDD format.");
-					int intDate = inputValidation.getValidDate();
+					int intDate = null;
 					java.util.Date newDate = convertIntToDate(intDate);
 					d.updateTransaction(id, option, newDate);
 					break;
@@ -211,37 +240,7 @@ public class TransactionTool {
 		}
 	}
 
-	private double calculateCashBack(Transaction transaction) {
-		int card = transaction.getCardID();
-		double rate = 0.0;
-		double everythingRate = 0.0;
-
-		double cashBack;
-
-		List<CreditCard> cardsOnFile = ccr.getCreditCards(username);
-
-		for (CreditCard cc : cardsOnFile) {
-			if (cc.getCreditCardID() == card) {
-				for (CreditCardReward cat : cc.getCardCashBackCategories()) {
-					if (cat.getCategoryOfCashBack().equalsIgnoreCase(transaction.getCategory())) {
-						rate = cat.getPercentageOfCashBack();
-						break;
-					} else if (cat.getCategoryOfCashBack().equalsIgnoreCase("everything")) {
-						everythingRate = cat.getPercentageOfCashBack();
-						break;
-					}
-				}
-			}
-		}
-
-		if (rate > everythingRate) {
-			cashBack = transaction.getTotal() * rate;
-		} else {
-			cashBack = transaction.getTotal() * everythingRate;
-		}
-
-		return cashBack;
-	}
+	
 
 	private static java.util.Date convertIntToDate(int yyyymmdd) {
 		Integer rawDate = (Integer) yyyymmdd;
@@ -279,5 +278,6 @@ public class TransactionTool {
 
 		return total;
 	}
+	*/
 
 }

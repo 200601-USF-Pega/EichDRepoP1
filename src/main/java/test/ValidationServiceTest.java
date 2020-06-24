@@ -10,7 +10,7 @@ import com.revature.creditcardrewardtracker.service.ValidationService;
 
 class ValidationServiceTest {
 	
-	ValidationService validation = new ValidationService(null);
+	ValidationService validation = new ValidationService();
 
 	@Test
 	void testUsernameLengthValidation() {
