@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,17 +20,15 @@ import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.CreditCard;
 import com.revature.creditcardrewardtracker.service.ValidationService;
 
-@Path("/creditcardrewardservice")
+@Path("/creditcardrewardservice/{cardid}")
 public class CreditCardRewardService {
 	
-	private String username;
 	private ICreditCardRepo d;
 	private ICreditCardRewardsRepo ccrr;
 	private ValidationService validation;
 
 
-	public CreditCardRewardService(String username) {
-		this.username = username;
+	public CreditCardRewardService() {
 		ccrr = new CreditCardRewardsRepoDB();
 		d = new CreditCardRepoDB();
 		validation = new ValidationService();
@@ -37,7 +36,7 @@ public class CreditCardRewardService {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addCreditCardReward(int cardId, CreditCardReward reward) {
+	public Response addCreditCardReward(@PathParam("cardid") Integer cardId, CreditCardReward reward) {
 		ccrr.addCashBackCategory(cardId, reward);
 		return Response.status(201).build();
 	}
@@ -45,7 +44,7 @@ public class CreditCardRewardService {
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllCreditRewards(int cardId) {
+	public Response getAllCreditRewards(@PathParam("cardid") Integer cardId) {
 		return Response.ok((ArrayList<CreditCardReward>)ccrr.getCashBackCategories(cardId)).build();
 	}
 	

@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.service.InputValidationService;
-import com.revature.creditcardrewardtracker.service.TransactionService;
+import com.revature.creditcardrewardtracker.web.TransactionService;
 
 public class TransactionHistoryMenu implements IUserMenu {
 	

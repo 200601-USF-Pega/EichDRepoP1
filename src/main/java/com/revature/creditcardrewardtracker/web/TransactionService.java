@@ -1,39 +1,58 @@
-package com.revature.creditcardrewardtracker.service;
+package com.revature.creditcardrewardtracker.web;
 
-import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 
 import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
 import com.revature.creditcardrewardtracker.dao.ITransactionRepo;
 import com.revature.creditcardrewardtracker.dao.TransactionRepoDB;
-import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.CreditCard;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.Transaction;
+import com.revature.creditcardrewardtracker.service.InputValidationService;
+import com.revature.creditcardrewardtracker.service.ValidationService;
 
+@Path ("/transactionservice/{username}")
 public class TransactionService {
 	
 	private ITransactionRepo d;
-	private String username;
-	//private Connection connection;
-	private Scanner sc;
 	private ValidationService validation;
 	private ICreditCardRepo ccr;
-	private InputValidationService inputValidation;
 	
-	public TransactionService(String username, Connection connection, Scanner sc) {
-		d = new TransactionRepoDB(connection);
-		//this.connection = connection;
-		this.username = username;
-		this.sc = sc;
-		validation = new ValidationService(connection);
-		ccr = new CreditCardRepoDB(connection);
-		inputValidation = new InputValidationService(sc);
-		
+	public TransactionService() {
+		d = new TransactionRepoDB();
+		validation = new ValidationService();
+		ccr = new CreditCardRepoDB();
 	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addTransaction(Transaction transaction) {
+		d.addTransaction(transaction);
+		return Response.status(201).build();
+	}
+	
+	@GET
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllTransactions(@PathParam("username") String username) {
+		return Response.ok((ArrayList<Transaction>)d.listTransactions(username)).build();
+	}
+	
 	
 	public Transaction recordNewTransaction() {
 		

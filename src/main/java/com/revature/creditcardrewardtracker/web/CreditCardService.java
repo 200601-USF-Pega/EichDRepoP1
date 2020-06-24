@@ -1,14 +1,13 @@
 package com.revature.creditcardrewardtracker.web;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,23 +18,35 @@ import com.revature.creditcardrewardtracker.models.CreditCard;
 import com.revature.creditcardrewardtracker.service.InputValidationService;
 import com.revature.creditcardrewardtracker.service.ValidationService;
 
-@Path("/creditcardservice")
+@Path("/creditcardservice/{username}")
 public class CreditCardService {
 	
-	private String username;
 	private ICreditCardRepo d;
 	private ValidationService validation;
 	private InputValidationService inputValidation;
 	
-	public CreditCardService(String username) {
-		this.username = username;
+	public CreditCardService() {
 		d = new CreditCardRepoDB();
 		validation = new ValidationService();
 	}
 	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addCreditCard(@PathParam("username") String username, CreditCard card) {
+		d.addCreditCard(username, card);
+		return Response.status(201).build();
+	}
+	
+	@GET
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCreditCards(@PathParam("username") String username) {
+		return Response.ok((ArrayList<CreditCard>)d.getCreditCards(username)).build();
+	}
+	
 	public CreditCard createNewCreditCard() {
 		
-		CreditCardRewardService cashback = new CreditCardRewardService(username);	
+		CreditCardRewardService cashback = new CreditCardRewardService();	
 		CreditCard card = new CreditCard();
 		
 		try {
@@ -59,20 +70,6 @@ public class CreditCardService {
 		return card;
 	}
 	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addCreditCard(CreditCard card) {
-		d.addCreditCard(username, card);
-		return Response.status(201).build();
-	}
-	
-	@GET
-	@Path("/all")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCreditCards() {
-		return Response.ok((ArrayList<CreditCard>)d.getCreditCards(username)).build();
-	}
-	
 	public void deleteCreditCard() {
 		System.out.println("Please enter the Card ID for the credit card you wish to delete.");
 		
@@ -94,7 +91,6 @@ public class CreditCardService {
 			}
 		}
 	}
-	
 	
 	public void updateCardName() {
 		System.out.println("Please enter the Card ID for the credit card you wish to modify.");
