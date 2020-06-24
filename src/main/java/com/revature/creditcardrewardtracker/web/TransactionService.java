@@ -17,7 +17,7 @@ import com.revature.creditcardrewardtracker.dao.TransactionRepoDB;
 import com.revature.creditcardrewardtracker.models.Transaction;
 import com.revature.creditcardrewardtracker.service.TransactionTool;
 
-@Path ("/transactionservice/{username}")
+@Path ("/TransactionService/{username}")
 public class TransactionService {
 	
 	private ITransactionRepo d;
@@ -30,7 +30,8 @@ public class TransactionService {
 	}
 	
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/add")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response addTransaction(@PathParam("username") String username,
 			@FormParam("cardid") int cardID,
 			@FormParam("category") String category,
