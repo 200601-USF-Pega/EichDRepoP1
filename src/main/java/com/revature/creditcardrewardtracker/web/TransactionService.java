@@ -2,11 +2,14 @@ package com.revature.creditcardrewardtracker.web;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -26,7 +29,7 @@ import com.revature.creditcardrewardtracker.models.Transaction;
 import com.revature.creditcardrewardtracker.service.InputValidationService;
 import com.revature.creditcardrewardtracker.service.ValidationService;
 
-@Path ("/transactionservice/{username}")
+@Path ("/transactionservice")
 public class TransactionService {
 	
 	private ITransactionRepo d;
@@ -40,56 +43,49 @@ public class TransactionService {
 	}
 	
 	@POST
+	@Path("/{username}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addTransaction(Transaction transaction) {
+	public Response addTransaction(@PathParam("username") String username,
+			@FormParam("cardid") int cardID,
+			@FormParam("category") String category,
+			@FormParam("purchasedate") String date,
+			@FormParam("total") double total) {
+		Transaction transaction = this.createNewTransaction(cardID, date, category, total, username);
 		d.addTransaction(transaction);
 		return Response.status(201).build();
 	}
 	
 	@GET
-	@Path("/all")
+	@Path("/{username}/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllTransactions(@PathParam("username") String username) {
 		return Response.ok((ArrayList<Transaction>)d.listTransactions(username)).build();
 	}
 	
 	
-	public Transaction recordNewTransaction() {
+	public Transaction createNewTransaction(int cardID, String htmlDate, String category, double total, String username) {
 		
 		Transaction transaction = new Transaction();
-		
-		System.out.println("Preparing entry for Transaction");
-		
-		System.out.println("What was the Card Id assocaited with the credit card used?");
-		System.out.println(ccr.getCreditCards(username));
-		//int cardId = sc.nextInt();
-		int cardId = inputValidation.getValidInt();
-		boolean belongsToUser = validation.permissionToModifyCard(username, cardId);
+		boolean belongsToUser = validation.permissionToModifyCard(username, cardID);
 		
 		if (belongsToUser == true) {
-			transaction.setCardID(cardId);
+			transaction.setCardID(cardID);
 		} else {
 			return transaction;
 		}
 		
-		System.out.println("When did the transaction occur? Please use the YYYYMMDD format.");
-		//int dateInt = sc.nextInt();
-		int dateInt = inputValidation.getValidInt();
-		transaction.setDate(convertIntToDate(dateInt));
+		//getting date from HTML to ld date from Basil Bourque at
+		//https://stackoverflow.com/questions/52410740/how-can-i-get-input-type-date-value-from-html-form-into-java-variable-and-sql
+		DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+		LocalDate ld = LocalDate.parse(htmlDate, f);
+		//converting ld to util date from George at 
+		//https://stackoverflow.com/questions/33066904/localdate-to-java-util-date-and-vice-versa-simplest-conversion
+		java.util.Date date = java.sql.Date.valueOf(ld);
 		
-		System.out.println("Which category does the purchase fall under?");
-		//will need to print out all the categories in the DB here
-		transaction.setCategory(sc.nextLine().toUpperCase());
-		
-		System.out.println("What was the total for this transaction? Please use 0.00 for the format.");
-		//transaction.setTotal(sc.nextDouble());
-		double total = inputValidation.getValidDouble();
+		transaction.setDate(date);
+		transaction.setCategory(category);
 		transaction.setTotal(total);
-		
 		transaction.setCashBackTotal(this.calculateCashBack(transaction));
-		
-		d.addTransaction(transaction);
-		
 		return transaction;
 		
 	}
