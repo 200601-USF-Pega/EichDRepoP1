@@ -1,6 +1,5 @@
 package com.revature.creditcardrewardtracker.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.creditcardrewardtracker.models.Transaction;
+import com.revature.creditcardrewardtracker.web.ConnectionManager;
 
 //Java Util to SQL method adapted from Javin Paul's tutorial found on
 //https://www.java67.com/2014/02/how-to-convert-javautildate-to-javasqldate-example.html#:~:text=Since%20both%20Date%20classes%20are,sql.
@@ -18,17 +18,11 @@ import com.revature.creditcardrewardtracker.models.Transaction;
 //https://coderwall.com/p/609ppa/printing-the-result-of-resultset
 
 public class TransactionRepoDB implements ITransactionRepo {
-
-	Connection connection;
-	
-	public TransactionRepoDB(Connection connection) {
-		this.connection = connection;
-	}
 	
 	@Override
 	public void addTransaction(Transaction newTransaction) {
 		try {
-			PreparedStatement s = connection.prepareStatement("INSERT INTO "
+			PreparedStatement s = ConnectionManager.getConnection().prepareStatement("INSERT INTO "
 					+ "transactionrecords(date, category, transactiontotal, "
 					+ "cashbacktotal, cardid) VALUES (?, ?, ?, ?, ?)");
 						
@@ -49,7 +43,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		List<Transaction> transactionList = new ArrayList<Transaction>();
 		
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			ResultSet rs = s.executeQuery("SELECT * FROM transactionrecords "
 				+ "WHERE transactionid = " + transactionId + ";");
 			
@@ -67,7 +61,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		List<Transaction> transactionList = new ArrayList<Transaction>();
 		
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("SELECT transactionid, date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "INNER JOIN ("
@@ -92,7 +86,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 	public List<Transaction> listTransactionsForCategory(String username, String category) {
 		List<Transaction> transactionList = new ArrayList<Transaction>();
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("SELECT transactionid, date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "INNER JOIN ("
@@ -119,7 +113,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 	public List<Transaction> listTransactionsForCreditCard(String username, int cardID) {
 		List<Transaction> transactionList = new ArrayList<Transaction>();
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("SELECT transactionid, date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "INNER JOIN ("
@@ -147,7 +141,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 		java.sql.Date sqlStartDate = convertUtilToSQLDate(startDate);
 		java.sql.Date sqlEndDate = convertUtilToSQLDate(endDate);
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("SELECT transactionid, date, category, transactiontotal, cashbacktotal, t.cardid FROM transactionrecords as t "
 				+ "INNER JOIN ("
@@ -171,7 +165,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 	@Override
 	public void updateTransaction(int transactionId, int option, Object obj) {
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 				switch (option) {
 					case (1) :
 						//date
@@ -215,7 +209,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 	public boolean deleteTransaction(int id) {
 		
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.execute("DELETE FROM transactionrecords "
 				+ "WHERE transactionid = " + id +";");
 			return true;
@@ -259,7 +253,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 	
 	public void printResultSet(String username) {
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			ResultSet rs;
 			rs = s.executeQuery("SELECT * FROM transactionrecords as t "
 				+ "INNER JOIN ("

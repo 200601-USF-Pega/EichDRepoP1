@@ -1,6 +1,5 @@
 package com.revature.creditcardrewardtracker.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -10,21 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.creditcardrewardtracker.models.CategoryCashBack;
+import com.revature.creditcardrewardtracker.web.ConnectionManager;
 
 public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 	
-	Connection connection;
-	
-	public CreditCardRewardsRepoDB(Connection connection) {
-		this.connection = connection;
-	}
 	
 	@Override
 	public List<CategoryCashBack> getCashBackCategories(int cardId) {
 		List<CategoryCashBack> categories = new ArrayList<CategoryCashBack>();
 				
 		try {
-			Statement ns = connection.createStatement();
+			Statement ns = ConnectionManager.getConnection().createStatement();
 			ResultSet RSCats = ns.executeQuery("SELECT * FROM creditcardrewards"
 					+ " WHERE cardid = " + cardId + ";");
 			while (RSCats.next()) {
@@ -43,7 +38,7 @@ public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 	@Override
 	public void printCashBackCategories(int cardId) {
 		try {
-			Statement ns = connection.createStatement();
+			Statement ns = ConnectionManager.getConnection().createStatement();
 			ResultSet rs = ns.executeQuery("SELECT * FROM creditcardrewards"
 					+ " WHERE cardid = " + cardId + ";");
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -65,7 +60,7 @@ public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 	public boolean addCashBackCategory(int cardId, String category, double percentageback) {
 		try {
 			String query = "INSERT INTO creditcardrewards(cardid, category, percentageofcashback) VALUES (?, ?, ?)";
-			PreparedStatement categoryStatement = connection.prepareStatement(query);
+			PreparedStatement categoryStatement = ConnectionManager.getConnection().prepareStatement(query);
 			categoryStatement.setInt(1, cardId);
 			categoryStatement.setString(2, category);
 			categoryStatement.setDouble(3,  percentageback);
@@ -81,7 +76,7 @@ public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 	public boolean deleteCashBackCategory(int categoryId) {
 		try {
 			String query = "DELETE FROM creditcardrewards WHERE rewardid = ";
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.execute(query + categoryId + ";");
 			return true;
 		} catch (SQLException e) {
@@ -93,7 +88,7 @@ public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 	@Override
 	public boolean updateCashBackCategory(int categoryId, int option, Object obj) {
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			switch (option) {
 			case (0):
 				// 0 - update category name

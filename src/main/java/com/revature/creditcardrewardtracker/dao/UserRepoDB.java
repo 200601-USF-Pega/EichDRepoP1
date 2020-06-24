@@ -1,6 +1,5 @@
 package com.revature.creditcardrewardtracker.dao;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -8,19 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.creditcardrewardtracker.models.User;
+import com.revature.creditcardrewardtracker.web.ConnectionManager;
 
 public class UserRepoDB implements IUserRepo {
 
-	Connection connection;
-	
-	public UserRepoDB(Connection connection) {
-		this.connection = connection;
-	}
 	
 	@Override
 	public User addUser(User newUser) {
 		try {
-			Statement userStatement = connection.createStatement();
+			Statement userStatement = ConnectionManager.getConnection().createStatement();
 			userStatement.executeUpdate("INSERT INTO users VALUES ('" + newUser.getUsername() 
 				+ "', '" + newUser.getPassword() + "', '" + newUser.isAdmin() + "');");
 			return newUser;
@@ -36,7 +31,7 @@ public class UserRepoDB implements IUserRepo {
 		
 		List<String> listOfUsernames = new ArrayList<String>();
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.executeQuery("SELECT username FROM users;");
 
 			ResultSet rs = s.getResultSet();
@@ -55,7 +50,7 @@ public class UserRepoDB implements IUserRepo {
 	@Override
 	public String checkUser(String username, String password) {
 		try {
-			Statement userStatement = connection.createStatement();
+			Statement userStatement = ConnectionManager.getConnection().createStatement();
 			userStatement.executeQuery("SELECT * FROM users;");
 			
 			ResultSet rs = userStatement.getResultSet();
@@ -79,7 +74,7 @@ public class UserRepoDB implements IUserRepo {
 	
 	public boolean checkAdmin(String username) {
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.executeQuery("SELECT * FROM users;");
 			
 			ResultSet rs = s.getResultSet();
@@ -99,7 +94,7 @@ public class UserRepoDB implements IUserRepo {
 	
 	public boolean changePassword(String username, String password) {
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.executeUpdate("UPDATE Users "
 					+ "SET password = '" + password +
 					"' WHERE username = '" + username + "';");
@@ -115,7 +110,7 @@ public class UserRepoDB implements IUserRepo {
 	
 	public boolean promoteAdmin(String username) {
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.executeUpdate("UPDATE Users "
 					+ "SET isadmin = '" + true +
 					"' WHERE username = '" + username + "';");
@@ -132,7 +127,7 @@ public class UserRepoDB implements IUserRepo {
 	
 	public boolean demoteAdmin(String username) {
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.executeUpdate("UPDATE Users "
 					+ "SET isadmin = '" + false +
 					"' WHERE username = '" + username + "';");
@@ -150,7 +145,7 @@ public class UserRepoDB implements IUserRepo {
 	@Override
 	public boolean deleteUser(String username) {
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.execute("DELETE FROM users WHERE username = '" + username + "';");
 			return true;
 		} catch (SQLException e) {

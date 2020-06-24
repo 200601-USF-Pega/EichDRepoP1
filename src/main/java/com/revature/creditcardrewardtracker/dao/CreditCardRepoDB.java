@@ -1,6 +1,5 @@
 package com.revature.creditcardrewardtracker.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,14 +9,12 @@ import java.util.List;
 
 import com.revature.creditcardrewardtracker.models.CategoryCashBack;
 import com.revature.creditcardrewardtracker.models.CreditCard;
+import com.revature.creditcardrewardtracker.web.ConnectionManager;
 
 public class CreditCardRepoDB implements ICreditCardRepo {
 	
-	Connection connection;
-	
-	public CreditCardRepoDB(Connection connection) {
-		this.connection = connection;
-	}
+	//Connection ConnectionManager;
+
 
 	@Override
 	public CreditCard addCreditCard(String username, CreditCard card) {
@@ -26,7 +23,7 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 	
 		try {
 			String query1 = "INSERT INTO creditcards (cardname, username) VALUES (?, ?)";
-			PreparedStatement creditCardStatement = connection.prepareStatement(query1, PreparedStatement.RETURN_GENERATED_KEYS);
+			PreparedStatement creditCardStatement = ConnectionManager.getConnection().prepareStatement(query1, PreparedStatement.RETURN_GENERATED_KEYS);
 			creditCardStatement.setString(1,  card.getCreditCardName());
 			creditCardStatement.setString(2,  username);
 			creditCardStatement.executeUpdate();
@@ -35,7 +32,7 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 			int cardid = rs.next() ? rs.getInt(1) : 0;
 			card.setCreditCardID(cardid);
 			
-			ICreditCardRewardsRepo ccrr = new CreditCardRewardsRepoDB(connection);
+			ICreditCardRewardsRepo ccrr = new CreditCardRewardsRepoDB();
 			for (CategoryCashBack category : card.getCardCashBackCategories()) {
 				ccrr.addCashBackCategory(cardid, category.getCategoryOfCashBack(), category.getPercentageOfCashBack());
 			}
@@ -54,13 +51,13 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 		ResultSet RSCards;
 		ResultSet RSCats;
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			RSCards = s.executeQuery("SELECT * FROM CreditCards"
 					+ " WHERE username = '" + username + "';");
 
 			//ResultSet rsa = s.getResultSet();
 			while (RSCards.next()) {
-				Statement ns = connection.createStatement();
+				Statement ns = ConnectionManager.getConnection().createStatement();
 				CreditCard tempCard = new CreditCard();
 				tempCard.setCreditCardID(RSCards.getInt("cardid"));
 				tempCard.setCreditCardName(RSCards.getString("cardname"));
@@ -92,7 +89,7 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 	@Override
 	public boolean deleteCard(int cardId) {
 		try {
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.execute("DELETE FROM creditcards WHERE cardid = '" + cardId + "';");
 			return true;
 		} catch (SQLException e) {
@@ -106,7 +103,7 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 	@Override
 	public boolean updateCard(int cardId, String name) {
 		try {	
-			Statement s = connection.createStatement();
+			Statement s = ConnectionManager.getConnection().createStatement();
 			s.executeUpdate("UPDATE creditcards AS c " +
 					"SET cardname = '" + name + "' WHERE c.cardId = " + cardId + ";");
 			return true;
