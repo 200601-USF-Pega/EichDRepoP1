@@ -2,8 +2,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.revature.creditcardrewardtracker.dao.ConnectionManager;
 import com.revature.creditcardrewardtracker.menu.LogInMenu;
+import com.revature.creditcardrewardtracker.web.ConnectionManager;
 
 public class Driver {
 

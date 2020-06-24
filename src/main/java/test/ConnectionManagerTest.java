@@ -6,7 +6,7 @@ import java.sql.Connection;
 
 import org.junit.jupiter.api.Test;
 
-import com.revature.creditcardrewardtracker.dao.ConnectionManager;
+import com.revature.creditcardrewardtracker.web.ConnectionManager;
 
 class ConnectionManagerTest {
 

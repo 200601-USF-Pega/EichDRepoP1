@@ -459,5 +459,6 @@ MigrationBackup/
 .ionide/
 
 *.prop
+MyProps.java
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,visualstudio,java,eclipse
