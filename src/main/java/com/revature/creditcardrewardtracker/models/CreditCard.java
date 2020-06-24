@@ -10,7 +10,7 @@ public class CreditCard  {
 	
 	private String creditCardName;
 	private int creditCardID;
-	private List<CategoryCashBack> cardCashBackCategories;
+	private List<CreditCardReward> cardCashBackCategories;
 	
 	public CreditCard() {
 		
@@ -44,11 +44,11 @@ public class CreditCard  {
 		this.creditCardID = creditCardID;
 	}
 
-	public List<CategoryCashBack> getCardCashBackCategories() {
+	public List<CreditCardReward> getCardCashBackCategories() {
 		return cardCashBackCategories;
 	}
 
-	public void setCardCashBackCategories(List<CategoryCashBack> cardCashBackCategories) {
+	public void setCardCashBackCategories(List<CreditCardReward> cardCashBackCategories) {
 		this.cardCashBackCategories = cardCashBackCategories;
 	}
 

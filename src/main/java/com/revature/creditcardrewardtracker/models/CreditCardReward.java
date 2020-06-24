@@ -1,15 +1,15 @@
 package com.revature.creditcardrewardtracker.models;
 
-public class CategoryCashBack {
+public class CreditCardReward {
 	
 	private String categoryOfCashBack;
 	private double percentageOfCashBack;
 	
-	public CategoryCashBack() {
+	public CreditCardReward() {
 		
 	}
 	
-	public CategoryCashBack(String categoryOfCashBack, double percentageOfCashBack) {
+	public CreditCardReward(String categoryOfCashBack, double percentageOfCashBack) {
 		this.categoryOfCashBack = categoryOfCashBack;
 		this.percentageOfCashBack = percentageOfCashBack;
 	}

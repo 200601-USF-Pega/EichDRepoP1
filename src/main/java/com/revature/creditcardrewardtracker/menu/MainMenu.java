@@ -3,9 +3,9 @@ package com.revature.creditcardrewardtracker.menu;
 import java.sql.Connection;
 import java.util.Scanner;
 
-import com.revature.creditcardrewardtracker.service.CreditCardService;
 import com.revature.creditcardrewardtracker.service.InputValidationService;
 import com.revature.creditcardrewardtracker.service.TransactionService;
+import com.revature.creditcardrewardtracker.web.CreditCardService;
 
 public class MainMenu implements IUserMenu {
 	

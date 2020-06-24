@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
-import com.revature.creditcardrewardtracker.models.CategoryCashBack;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.CreditCard;
 
 public class CalculatorService {
@@ -35,7 +35,7 @@ public class CalculatorService {
 		for (int i = 0; cards.size() > i; i++) {
 			CreditCard tempCard = cards.get(i);
 			for (int j = 0; tempCard.getCardCashBackCategories().size() > j; j++) {
-				List<CategoryCashBack> tempCategoriesList = tempCard.getCardCashBackCategories();
+				List<CreditCardReward> tempCategoriesList = tempCard.getCardCashBackCategories();
 				if (tempCategoriesList.get(j).getCategoryOfCashBack().equalsIgnoreCase(category)) {
 					double tempRate = tempCategoriesList.get(j).getPercentageOfCashBack();
 					if (tempRate > bestRate) {
@@ -71,7 +71,7 @@ public class CalculatorService {
 					
 					double bestRate = 0.00;
 					for (int j = 0; tempCard.getCardCashBackCategories().size() > j; j++) {
-						List<CategoryCashBack> tempCategoriesList = tempCard.getCardCashBackCategories();
+						List<CreditCardReward> tempCategoriesList = tempCard.getCardCashBackCategories();
 						if (tempCategoriesList.get(j).getCategoryOfCashBack().equalsIgnoreCase(category)) {
 							double tempRate = tempCategoriesList.get(j).getPercentageOfCashBack();
 							if (tempRate > bestRate) {

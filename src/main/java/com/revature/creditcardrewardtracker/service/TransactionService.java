@@ -10,7 +10,7 @@ import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
 import com.revature.creditcardrewardtracker.dao.ITransactionRepo;
 import com.revature.creditcardrewardtracker.dao.TransactionRepoDB;
-import com.revature.creditcardrewardtracker.models.CategoryCashBack;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.CreditCard;
 import com.revature.creditcardrewardtracker.models.Transaction;
 
@@ -245,7 +245,7 @@ public class TransactionService {
 		
 		for (CreditCard cc : cardsOnFile) {
 			if (cc.getCreditCardID() == card) {
-				for (CategoryCashBack cat : cc.getCardCashBackCategories()) {
+				for (CreditCardReward cat : cc.getCardCashBackCategories()) {
 					if (cat.getCategoryOfCashBack().equalsIgnoreCase(transaction.getCategory())) {
 						rate = cat.getPercentageOfCashBack();
 						break;

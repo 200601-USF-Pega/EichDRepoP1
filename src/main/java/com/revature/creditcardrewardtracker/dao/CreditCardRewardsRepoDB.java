@@ -8,22 +8,22 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.creditcardrewardtracker.models.CategoryCashBack;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.web.ConnectionManager;
 
 public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 	
 	
 	@Override
-	public List<CategoryCashBack> getCashBackCategories(int cardId) {
-		List<CategoryCashBack> categories = new ArrayList<CategoryCashBack>();
+	public List<CreditCardReward> getCashBackCategories(int cardId) {
+		List<CreditCardReward> categories = new ArrayList<CreditCardReward>();
 				
 		try {
 			Statement ns = ConnectionManager.getConnection().createStatement();
 			ResultSet RSCats = ns.executeQuery("SELECT * FROM creditcardrewards"
 					+ " WHERE cardid = " + cardId + ";");
 			while (RSCats.next()) {
-				CategoryCashBack tempCat = new CategoryCashBack();
+				CreditCardReward tempCat = new CreditCardReward();
 				tempCat.setCategoryOfCashBack(RSCats.getString("category"));
 				tempCat.setPercentageOfCashBack(RSCats.getDouble("percentageofcashback"));
 				categories.add(tempCat);
@@ -71,6 +71,20 @@ public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 		}
 		return false;
 	}
+	
+	@Override
+	public void addCashBackCategory(int cardId, CreditCardReward reward) {
+		try {
+			String query = "INSERT INTO creditcardrewards(cardid, category, percentageofcashback) VALUES (?, ?, ?)";
+			PreparedStatement categoryStatement = ConnectionManager.getConnection().prepareStatement(query);
+			categoryStatement.setInt(1, cardId);
+			categoryStatement.setString(2, reward.getCategoryOfCashBack());
+			categoryStatement.setDouble(3,  reward.getPercentageOfCashBack());
+			categoryStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public boolean deleteCashBackCategory(int categoryId) {
@@ -106,5 +120,7 @@ public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 		}
 		return false;
 	}
+
+
 
 }

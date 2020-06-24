@@ -1,38 +1,59 @@
-package com.revature.creditcardrewardtracker.service;
+package com.revature.creditcardrewardtracker.web;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
 import com.revature.creditcardrewardtracker.dao.CreditCardRewardsRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRewardsRepo;
-import com.revature.creditcardrewardtracker.models.CategoryCashBack;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.CreditCard;
+import com.revature.creditcardrewardtracker.service.ValidationService;
 
-public class CashbackCategoryService {
+@Path("/creditcardrewardservice")
+public class CreditCardRewardService {
 	
 	private String username;
 	private ICreditCardRepo d;
 	private ICreditCardRewardsRepo ccrr;
 	private ValidationService validation;
-	private InputValidationService inputValidation;
 
-	public CashbackCategoryService(String username, Connection connection, Scanner sc) {
+
+	public CreditCardRewardService(String username) {
 		this.username = username;
-		ccrr = new CreditCardRewardsRepoDB(connection);
-		d = new CreditCardRepoDB(connection);
-		validation = new ValidationService(connection);
-		inputValidation = new InputValidationService(sc);
-		
+		ccrr = new CreditCardRewardsRepoDB();
+		d = new CreditCardRepoDB();
+		validation = new ValidationService();
 	}
 	
-	public List<CategoryCashBack> createNewCashbackCategory() {
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addCreditCardReward(int cardId, CreditCardReward reward) {
+		ccrr.addCashBackCategory(cardId, reward);
+		return Response.status(201).build();
+	}
+	
+	@GET
+	@Path("/all")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllCreditRewards(int cardId) {
+		return Response.ok((ArrayList<CreditCardReward>)ccrr.getCashBackCategories(cardId)).build();
+	}
+	
+	
+	public List<CreditCardReward> createNewCashbackCategory() {
 		
 		//Scanner cashScan = new Scanner(System.in);
-		List<CategoryCashBack> categories = new ArrayList<CategoryCashBack>();
+		List<CreditCardReward> categories = new ArrayList<CreditCardReward>();
 		
 		System.out.println("What are the cash back categories and their percentage back? Enter done when complete");
 		
@@ -40,7 +61,7 @@ public class CashbackCategoryService {
 		try {
 			String scanResult;
 			do {
-				CategoryCashBack category = new CategoryCashBack();
+				CreditCardReward category = new CreditCardReward();
 				
 				System.out.println("What is the name of the category?");
 				scanResult = inputValidation.getValidStringInput();
@@ -132,7 +153,7 @@ public class CashbackCategoryService {
 	
 	public void printCashBackCategories() {
 		int id = this.identifyCreditCard();
-		List<CategoryCashBack> list = ccrr.getCashBackCategories(id);
+		List<CreditCardReward> list = ccrr.getCashBackCategories(id);
 		System.out.println(list);
 	}
 	

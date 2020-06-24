@@ -10,14 +10,14 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
-import com.revature.creditcardrewardtracker.models.CategoryCashBack;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.CreditCard;
 
 class CreditCardTest {
 	
 	CreditCard testCard = new CreditCard();
-	CategoryCashBack testCategory = new CategoryCashBack();
-	List<CategoryCashBack> list = new ArrayList<CategoryCashBack>();
+	CreditCardReward testCategory = new CreditCardReward();
+	List<CreditCardReward> list = new ArrayList<CreditCardReward>();
 
 
 	@Test

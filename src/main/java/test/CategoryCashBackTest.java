@@ -5,11 +5,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
-import com.revature.creditcardrewardtracker.models.CategoryCashBack;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
 
 class CategoryCashBackTest {
 	
-	CategoryCashBack categoryTest = new CategoryCashBack();
+	CreditCardReward categoryTest = new CreditCardReward();
 
 	@Test
 	void testSetAndGetCategory() {

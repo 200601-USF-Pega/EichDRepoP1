@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.creditcardrewardtracker.models.CategoryCashBack;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.CreditCard;
 import com.revature.creditcardrewardtracker.web.ConnectionManager;
 
@@ -33,7 +33,7 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 			card.setCreditCardID(cardid);
 			
 			ICreditCardRewardsRepo ccrr = new CreditCardRewardsRepoDB();
-			for (CategoryCashBack category : card.getCardCashBackCategories()) {
+			for (CreditCardReward category : card.getCardCashBackCategories()) {
 				ccrr.addCashBackCategory(cardid, category.getCategoryOfCashBack(), category.getPercentageOfCashBack());
 			}
 			
@@ -62,12 +62,12 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 				tempCard.setCreditCardID(RSCards.getInt("cardid"));
 				tempCard.setCreditCardName(RSCards.getString("cardname"));
 				
-				List<CategoryCashBack> categories = new ArrayList<CategoryCashBack>();
+				List<CreditCardReward> categories = new ArrayList<CreditCardReward>();
 				RSCats = ns.executeQuery("SELECT * FROM creditcardrewards"
 						+ " WHERE cardid = " + tempCard.getCreditCardID() + ";");
 				//ResultSet rsn = s.getResultSet();
 				while (RSCats.next()) {
-					CategoryCashBack tempCat = new CategoryCashBack();
+					CreditCardReward tempCat = new CreditCardReward();
 					tempCat.setCategoryOfCashBack(RSCats.getString("category"));
 					tempCat.setPercentageOfCashBack(RSCats.getDouble("percentageofcashback"));
 					categories.add(tempCat);

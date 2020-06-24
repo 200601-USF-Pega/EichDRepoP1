@@ -1,6 +1,5 @@
 package com.revature.creditcardrewardtracker.service;
 
-import java.sql.Connection;
 import java.util.List;
 
 import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
@@ -15,17 +14,12 @@ import com.revature.creditcardrewardtracker.models.Transaction;
 
 public class ValidationService {
 
-	private Connection connection;
-	
-	public ValidationService(Connection connection) {
-		this.connection = connection;
-	}
-	
+
 	
 	//validates that the username is available to be used to prevent unique errors from DB
 	//returns false if used, true if new
 	public boolean usernameUniqueValidation(String username) {
-		IUserRepo ur = new UserRepoDB(connection);
+		IUserRepo ur = new UserRepoDB();
 		List<String> usernames = ur.getAllUsers();
 		
 		for (String user : usernames) {
@@ -47,7 +41,7 @@ public class ValidationService {
 	}
 	
 	public boolean usernameExistsValidation(String username) {
-		IUserRepo ur = new UserRepoDB(connection);
+		IUserRepo ur = new UserRepoDB();
 		List<String> usernames = ur.getAllUsers();
 		
 		for (String user : usernames) {
@@ -70,7 +64,7 @@ public class ValidationService {
 	
 	//validates that the transaction belongs to the user
 	public boolean permissionToModifyTransaction(String username, int transactionId) {
-		ITransactionRepo tr = new TransactionRepoDB(connection);
+		ITransactionRepo tr = new TransactionRepoDB();
 		List<Transaction> transactionsForUser = tr.listTransactions(username);
 		
 		for (Transaction t : transactionsForUser) {
@@ -85,7 +79,7 @@ public class ValidationService {
 	
 	//validates that the credit card belongs to the user
 	public boolean permissionToModifyCard(String username, int cardId) {
-		ICreditCardRepo ccr = new CreditCardRepoDB(connection);
+		ICreditCardRepo ccr = new CreditCardRepoDB();
 		List<CreditCard> cardsForUser = ccr.getCreditCards(username);
 		
 		for (CreditCard c : cardsForUser) {
