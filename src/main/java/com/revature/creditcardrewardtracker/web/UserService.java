@@ -31,7 +31,7 @@ private static final Logger logger = Logger.getLogger(LogInService.class);
 	
 	@POST
 	@Path("/newuser")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response newUser(
 			@FormParam("username") String username,
 			@FormParam("password") String password,
