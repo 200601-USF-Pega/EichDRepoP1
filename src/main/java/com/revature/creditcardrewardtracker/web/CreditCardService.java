@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
 import com.revature.creditcardrewardtracker.models.CreditCard;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.service.InputValidationService;
 import com.revature.creditcardrewardtracker.service.ValidationService;
 
@@ -32,7 +34,18 @@ public class CreditCardService {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addCreditCard(@PathParam("username") String username, CreditCard card) {
+	public Response addCreditCard(@PathParam("username") String username, 
+			@FormParam("cardname") String cardName,
+			@FormParam("category") String category,
+			@FormParam("categoryrate") double rate) {
+		CreditCard card = new CreditCard();
+		card.setCreditCardName(cardName);
+		List<CreditCardReward> rewards = new ArrayList<CreditCardReward>();
+		CreditCardReward reward = new CreditCardReward();
+		reward.setCategoryOfCashBack(category);
+		reward.setPercentageOfCashBack(rate);
+		rewards.add(reward);
+		card.setCardCashBackCategories(rewards);
 		d.addCreditCard(username, card);
 		return Response.status(201).build();
 	}
@@ -42,32 +55,6 @@ public class CreditCardService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCreditCards(@PathParam("username") String username) {
 		return Response.ok((ArrayList<CreditCard>)d.getCreditCards(username)).build();
-	}
-	
-	public CreditCard createNewCreditCard() {
-		
-		CreditCardRewardService cashback = new CreditCardRewardService();	
-		CreditCard card = new CreditCard();
-		
-		try {
-			System.out.println("What is the name of the credit card?");
-			String creditCardName = inputValidation.getValidStringInput();
-			card.setCreditCardName(creditCardName);
-			
-			/*System.out.println("What are the last 4 digits of the credit card?");
-			int cardID = Integer.parseInt(input.nextLine());
-			card.setCreditCardID(cardID);*/
-			
-			card.setCardCashBackCategories(cashback.createNewCashbackCategory());
-			
-			card = d.addCreditCard(username, card);
-			
-			System.out.println(card);
-			return card;
-		} catch (Exception e) {
-			System.out.println("Invalid input type.");
-		} 
-		return card;
 	}
 	
 	public void deleteCreditCard() {
