@@ -17,10 +17,10 @@ public class CalculatorService {
 	private String username;
 	
 	public CalculatorService(Connection connection, String username, Scanner sc) {
-		ICreditCardRepo ccr = new CreditCardRepoDB(connection);
+		ICreditCardRepo ccr = new CreditCardRepoDB();
 		cards = ccr.getCreditCards(username);
 		inputValidation = new InputValidationService(sc);
-		validation = new ValidationService(connection);
+		validation = new ValidationService();
 		this.username = username;
 	}
 	

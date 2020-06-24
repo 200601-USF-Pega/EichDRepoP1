@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.util.Scanner;
 
 import com.revature.creditcardrewardtracker.service.InputValidationService;
-import com.revature.creditcardrewardtracker.service.LogInService;
 import com.revature.creditcardrewardtracker.service.UserService;
+import com.revature.creditcardrewardtracker.web.LogInService;
 
 public class LogInMenu implements IMenu {
 	

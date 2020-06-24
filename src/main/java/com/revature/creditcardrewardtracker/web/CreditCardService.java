@@ -38,6 +38,7 @@ public class CreditCardService {
 			@FormParam("cardname") String cardName,
 			@FormParam("category") String category,
 			@FormParam("categoryrate") double rate) {
+		//build POJO to add to DB
 		CreditCard card = new CreditCard();
 		card.setCreditCardName(cardName);
 		List<CreditCardReward> rewards = new ArrayList<CreditCardReward>();
@@ -46,7 +47,9 @@ public class CreditCardService {
 		reward.setPercentageOfCashBack(rate);
 		rewards.add(reward);
 		card.setCardCashBackCategories(rewards);
+		//add POJO to DB
 		d.addCreditCard(username, card);
+		//returns http response
 		return Response.status(201).build();
 	}
 	
