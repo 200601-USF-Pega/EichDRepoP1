@@ -1,11 +1,11 @@
 package com.revature.creditcardrewardtracker.models;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Transaction {
 	
 	private int cardID;
-	private Date date;
+	private LocalDate date;
 	private String category;
 	private double total;
 	private double cashBackTotal;
@@ -15,11 +15,11 @@ public class Transaction {
 		
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 	
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

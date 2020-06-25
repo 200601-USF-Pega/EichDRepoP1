@@ -1,5 +1,6 @@
 package com.revature.creditcardrewardtracker.dao;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -26,7 +27,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 					+ "transactionrecords(date, category, transactiontotal, "
 					+ "cashbacktotal, cardid) VALUES (?, ?, ?, ?, ?)");
 						
-			s.setDate(1, convertUtilToSQLDate(newTransaction.getDate()));
+			s.setDate(1, convertLocalToSQLDate(newTransaction.getDate()));
 			s.setString(2, newTransaction.getCategory());
 			s.setDouble(3,  newTransaction.getTotal());
 			s.setDouble(4,  newTransaction.getCashBackTotal());
@@ -226,9 +227,14 @@ public class TransactionRepoDB implements ITransactionRepo {
 		return sqlDate;
 	}
 	
-	private static java.util.Date convertSQLToUtilDate(java.sql.Date date) {
-		java.util.Date utilDate = new java.util.Date(date.getTime());
-		return utilDate;
+	private static java.sql.Date convertLocalToSQLDate(java.time.LocalDate date) {
+		java.sql.Date sqlDate = Date.valueOf(date);
+		return sqlDate;
+	}
+	
+	private static java.time.LocalDate convertSQLtoLocalDate(java.sql.Date date) {
+		java.time.LocalDate localDate = date.toLocalDate();
+		return localDate;
 	}
 	
 	private static List<Transaction> createTransactionList(ResultSet rs, List<Transaction> transactionList) {
@@ -238,7 +244,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 				tempTransaction.setCardID(rs.getInt("cardid"));
 				tempTransaction.setCategory(rs.getString("category"));
 				tempTransaction.setTotal(rs.getDouble("transactiontotal"));
-				tempTransaction.setDate(convertSQLToUtilDate(rs.getDate("date")));
+				tempTransaction.setDate(convertSQLtoLocalDate(rs.getDate("date")));
 				tempTransaction.setCashBackTotal(rs.getDouble("cashbacktotal"));
 				tempTransaction.setTransactionId(rs.getInt("transactionid"));
 				transactionList.add(tempTransaction);

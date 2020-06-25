@@ -40,9 +40,7 @@ public class TransactionTool {
 		LocalDate ld = LocalDate.parse(htmlDate, f);
 		// converting ld to util date from George at
 		// https://stackoverflow.com/questions/33066904/localdate-to-java-util-date-and-vice-versa-simplest-conversion
-		java.util.Date date = java.sql.Date.valueOf(ld);
-
-		transaction.setDate(date);
+		transaction.setDate(ld);
 		transaction.setCategory(category.toUpperCase());
 		transaction.setTotal(total);
 		transaction.setCashBackTotal(this.calculateCashBack(transaction, username));
