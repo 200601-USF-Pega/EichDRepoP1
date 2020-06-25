@@ -49,4 +49,40 @@ public class TransactionService {
 		return Response.ok((ArrayList<Transaction>)d.listTransactions(username)).build();
 	}
 	
+	@GET
+	@Path("/total/category/{category}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCategoryTotal(@PathParam("username") String username,
+			@PathParam("category") String category) {
+		double total = t.getTotalForCategories(username, category);
+		return Response.ok(total).build();
+	}
+	
+	@GET
+	@Path("/total/cashback/category/{category}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCategoryCashBackTotal(@PathParam("username") String username,
+			@PathParam("category") String category) {
+		double total = t.getTotalCashBackForCategories(username, category);
+		return Response.ok(total).build();
+	}
+	
+	@GET
+	@Path("/total/card/{cardid}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCardTotal(@PathParam("username") String username,
+			@PathParam("cardid") int cardid) {
+		double total = t.getTotalForCard(username, cardid);
+		return Response.ok(total).build();
+	}
+	
+	@GET
+	@Path("/total/cashback/card/{cardid}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCardCashBackTotal(@PathParam("username") String username,
+			@PathParam("cardid") int cardid) {
+		double total = t.getTotalCashBackForCard(username, cardid);
+		return Response.ok(total).build();
+	}
+	
 }

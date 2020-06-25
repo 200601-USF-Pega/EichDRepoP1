@@ -1,28 +1,27 @@
 package com.revature.creditcardrewardtracker.service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
+import com.revature.creditcardrewardtracker.dao.ITransactionRepo;
+import com.revature.creditcardrewardtracker.dao.TransactionRepoDB;
 import com.revature.creditcardrewardtracker.models.CreditCard;
 import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.Transaction;
 
 public class TransactionTool {
 	
-	private String username;
-
 	private ValidationService validation;
 	private ICreditCardRepo ccr;
+	private ITransactionRepo tr;
 
 	public TransactionTool() {
 		validation = new ValidationService();
 		ccr = new CreditCardRepoDB();
-		username = "test2";
+		tr = new TransactionRepoDB();
 	}
 
 	public Transaction createNewTransaction(int cardID, String htmlDate, String category, double total,
@@ -46,14 +45,48 @@ public class TransactionTool {
 		java.util.Date date = java.sql.Date.valueOf(ld);
 
 		transaction.setDate(date);
-		transaction.setCategory(category);
+		transaction.setCategory(category.toUpperCase());
 		transaction.setTotal(total);
-		transaction.setCashBackTotal(this.calculateCashBack(transaction));
+		transaction.setCashBackTotal(this.calculateCashBack(transaction, username));
 		return transaction;
 
 	}
 	
-	private double calculateCashBack(Transaction transaction) {
+	public double getTotalForCategories(String username, String category) {
+		List<Transaction> list = tr.listTransactionsForCategory(username, category.toUpperCase());
+		if (list.isEmpty()) {
+			System.out.println("Nothing found for that category");
+			return 0;
+		}
+		return calculateTotalFromList(list);
+	}
+	
+	public double getTotalCashBackForCategories(String username, String category) {
+		List<Transaction> list = tr.listTransactionsForCategory(username, category.toUpperCase());
+		if (list.isEmpty()) {
+			System.out.println("Nothing found for that category");
+			return 0;
+		}
+		return calculateTotalCashBackFromList(list);
+	}
+	
+	public double getTotalForCard(String username, int cardid) {
+		if (validation.permissionToModifyCard(username, cardid)) {
+			List<Transaction> list = tr.listTransactionsForCreditCard(username, cardid);
+			return calculateTotalFromList(list);
+		}
+		return 0;
+	}
+	
+	public double getTotalCashBackForCard(String username, int cardid) {
+		if (validation.permissionToModifyCard(username, cardid)) {
+			List<Transaction> list = tr.listTransactionsForCreditCard(username, cardid);
+			return calculateTotalCashBackFromList(list);
+		}
+		return 0;
+	}
+	
+	private double calculateCashBack(Transaction transaction, String username) {
 		int card = transaction.getCardID();
 		double rate = 0.0;
 		double everythingRate = 0.0;
@@ -83,6 +116,26 @@ public class TransactionTool {
 		}
 
 		return cashBack;
+	}
+	
+	private static double calculateTotalFromList(List<Transaction> list) {
+		double total = 0.0;
+
+		for (Transaction transaction : list) {
+			total += transaction.getTotal();
+		}
+
+		return total;
+	}
+
+	private static double calculateTotalCashBackFromList(List<Transaction> list) {
+		double total = 0.0;
+
+		for (Transaction transaction : list) {
+			total += transaction.getCashBackTotal();
+		}
+
+		return total;
 	}
 
 	/*
@@ -138,33 +191,6 @@ public class TransactionTool {
 		}
 	}
 
-	public double getTotalForCategories() {
-
-		System.out.println("What category would like you pull records from?");
-		String category = inputValidation.getValidStringInput().toUpperCase();
-		List<Transaction> list = d.listTransactionsForCategory(username, category);
-
-		if (list.isEmpty()) {
-			System.out.println("Nothing found for that category");
-			return 0;
-		}
-
-		return calculateTotalFromList(list);
-	}
-
-	public double getTotalForCard() {
-
-		System.out.println("What credit card would like you pull records from? Please provide the Card Id.");
-		System.out.println(ccr.getCreditCards(username));
-		int card = inputValidation.getValidInt();
-		boolean belongsToUser = validation.permissionToModifyCard(username, card);
-		if (belongsToUser == true) {
-			List<Transaction> list = d.listTransactionsForCreditCard(username, card);
-			return calculateTotalFromList(list);
-		}
-		return 0;
-	}
-
 	public double getTotalForDateRange() {
 
 		System.out.println("What is the start date for your date range? Please use YYYYMMDD format.");
@@ -181,31 +207,6 @@ public class TransactionTool {
 	public double getTotalCashBack() {
 		List<Transaction> list = d.listTransactions(username);
 		return calculateTotalCashBackFromList(list);
-	}
-
-	public double getTotalCashBackForCategories() {
-
-		System.out.println("What category would like you pull records from?");
-		String category = inputValidation.getValidStringInput().toUpperCase();
-		List<Transaction> list = d.listTransactionsForCategory(username, category);
-
-		return calculateTotalCashBackFromList(list);
-	}
-
-	public double getTotalCashBackForCard() {
-
-		System.out.println("What credit card would like you pull records from? Please provide the Card Id.");
-		System.out.println(ccr.getCreditCards(username));
-
-		int card = inputValidation.getValidInt();
-
-		boolean belongsToUser = validation.permissionToModifyCard(username, card);
-
-		if (belongsToUser == true) {
-			List<Transaction> list = d.listTransactionsForCreditCard(username, card);
-			return calculateTotalCashBackFromList(list);
-		}
-		return 0;
 	}
 
 	public double getTotalCashBackForDateRange() {
@@ -259,25 +260,7 @@ public class TransactionTool {
 		return date;
 	}
 
-	private static double calculateTotalFromList(List<Transaction> list) {
-		double total = 0.0;
-
-		for (Transaction transaction : list) {
-			total += transaction.getTotal();
-		}
-
-		return total;
-	}
-
-	private static double calculateTotalCashBackFromList(List<Transaction> list) {
-		double total = 0.0;
-
-		for (Transaction transaction : list) {
-			total += transaction.getCashBackTotal();
-		}
-
-		return total;
-	}
+	
 	*/
 
 }
