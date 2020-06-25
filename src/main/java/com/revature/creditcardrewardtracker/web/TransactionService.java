@@ -3,6 +3,7 @@ package com.revature.creditcardrewardtracker.web;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,17 +17,20 @@ import com.revature.creditcardrewardtracker.dao.ITransactionRepo;
 import com.revature.creditcardrewardtracker.dao.TransactionRepoDB;
 import com.revature.creditcardrewardtracker.models.Transaction;
 import com.revature.creditcardrewardtracker.service.TransactionTool;
+import com.revature.creditcardrewardtracker.service.ValidationService;
 
 @Path ("/TransactionService/{username}")
 public class TransactionService {
 	
 	private ITransactionRepo d;
 	private TransactionTool t;
+	private ValidationService validation;
 
 	
 	public TransactionService() {
 		d = new TransactionRepoDB();
 		t = new TransactionTool();
+		validation = new ValidationService();
 	}
 	
 	@POST
@@ -83,6 +87,18 @@ public class TransactionService {
 			@PathParam("cardid") int cardid) {
 		double total = t.getTotalCashBackForCard(username, cardid);
 		return Response.ok(total).build();
+	}
+	
+	@DELETE
+	@Path("/remove")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response removeTransaction(@PathParam("username") String username,
+			int transactionID) {
+		if (validation.permissionToModifyTransaction(username, transactionID)) {
+			d.deleteTransaction(transactionID);
+			return Response.status(201).build();
+		}
+		return Response.status(401).build();
 	}
 	
 }

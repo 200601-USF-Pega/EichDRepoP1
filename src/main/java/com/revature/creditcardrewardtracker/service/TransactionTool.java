@@ -38,8 +38,7 @@ public class TransactionTool {
 		// https://stackoverflow.com/questions/52410740/how-can-i-get-input-type-date-value-from-html-form-into-java-variable-and-sql
 		DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/uuuu");
 		LocalDate ld = LocalDate.parse(htmlDate, f);
-		// converting ld to util date from George at
-		// https://stackoverflow.com/questions/33066904/localdate-to-java-util-date-and-vice-versa-simplest-conversion
+
 		transaction.setDate(ld);
 		transaction.setCategory(category.toUpperCase());
 		transaction.setTotal(total);

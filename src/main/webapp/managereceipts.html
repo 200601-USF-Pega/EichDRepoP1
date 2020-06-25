@@ -37,10 +37,10 @@
                         cardIdCell.innerHTML = transactions[i].cardID;
 
                         let totalCell = row.insertCell(4);
-                        totalCell.innerHTML = transactions[i].total;
+                        totalCell.innerHTML = '$' + transactions[i].total.toFixed(2);
 
                         let cashBackCell = row.insertCell(5);
-                        cashBackCell.innerHTML = transactions[i].cashBackTotal;
+                        cashBackCell.innerHTML = '$' + transactions[i].cashBackTotal.toFixed(2);
                     }
                 }
             };
@@ -65,21 +65,21 @@
             req.send(JSON.stringify(card));
         }
 
-        function deleteCard() {
-            let card = {};
-            card = document.querySelector("#cardID").value;
+        function deleteTransaction() {
+            let transaction = {};
+            transaction = document.querySelector("#transactionID").value;
         
 
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
                 if (this.readyState > 3) {
-                    document.querySelector("#cardID").value = "";
+                    document.querySelector("#transactionID").value = "";
                 }
             }
             
-            req.open("DELETE", "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardService/test2/remove", true);
+            req.open("DELETE", "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/test2/remove", true);
             req.setRequestHeader('Content-Type', 'application/json');
-            req.send(JSON.stringify(card));
+            req.send(JSON.stringify(transaction));
         }
  		
  	</script>
@@ -120,9 +120,7 @@
     <br/> <br/>
     <input type="button" onClick="getAllTransactions()" value="Get All Transactions"/>
     <br/> <br/>
-    <input type="text" id="cardName" />
-    <input type="button" id="inpButton" value="Add Card" onClick="submitCard()"/>
-    <input type="number" id="cardID" />
-    <input type="button" id="inpButton" value="Delete Card" onClick="deleteCard()"/>
+    <input type="number" id="transactionID" />
+    <input type="button" id="inpButton" value="Delete Transaction" onClick="deleteTransaction()"/>
 </body>
 </html>
