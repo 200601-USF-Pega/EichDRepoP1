@@ -43,7 +43,7 @@ public class LogInService {
 			String user = d.checkUser(username, password);
     		logger.info("User " + user + " successfully logged in.");
     		System.out.println(username + " logged in successfully.");
-    		String uribase = "http:localhost:8080/CreditCardRewardTrackerWeb/addcard.html";
+    		/*String uribase = "http:localhost:8080/CreditCardRewardTrackerWeb/addcard.html?username="+username;
     		URI targetURI;
 			try {
 				targetURI = new URI(uribase);
@@ -52,7 +52,8 @@ public class LogInService {
 				e.getMessage();
 				e.printStackTrace();
 			}  		
-    		return Response.status(200).build();
+			*/
+    		return Response.status(301).build();
 		} else {
 			System.out.println("Username not found. Please try again.");
 			return Response.status(400).build();

@@ -20,12 +20,11 @@ import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.service.InputValidationService;
 import com.revature.creditcardrewardtracker.service.ValidationService;
 
-@Path("/creditcardservice/{username}")
+@Path("/CreditCardService/{username}")
 public class CreditCardService {
 	
 	private ICreditCardRepo d;
 	private ValidationService validation;
-	private InputValidationService inputValidation;
 	
 	public CreditCardService() {
 		d = new CreditCardRepoDB();
@@ -33,7 +32,8 @@ public class CreditCardService {
 	}
 	
 	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response addCreditCard(@PathParam("username") String username, 
 			@FormParam("cardname") String cardName,
 			@FormParam("category") String category,
