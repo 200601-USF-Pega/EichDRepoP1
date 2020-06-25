@@ -43,7 +43,7 @@ public class TransactionService {
 	}
 	
 	@GET
-	@Path("/all")
+	@Path("/list/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllTransactions(@PathParam("username") String username) {
 		return Response.ok((ArrayList<Transaction>)d.listTransactions(username)).build();

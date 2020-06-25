@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -31,6 +32,7 @@ public class CreditCardService {
 		validation = new ValidationService();
 	}
 	
+	/*
 	@POST
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -52,12 +54,35 @@ public class CreditCardService {
 		//returns http response
 		return Response.status(201).build();
 	}
+	*/
+	@POST
+	@Path("/new")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addCreditCard(@PathParam("username") String username, 
+			CreditCard card) {
+		d.addCreditCard(username, card);
+		//returns http response
+		return Response.status(201).build();
+	}
+	
 	
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCreditCards(@PathParam("username") String username) {
 		return Response.ok((ArrayList<CreditCard>)d.getCreditCards(username)).build();
+	}
+	
+	@DELETE
+	@Path("/remove")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response removeCreditCard(@PathParam("username") String username,
+			int creditCardID) {
+		if (validation.permissionToModifyCard(username, creditCardID)) {
+			d.deleteCard(creditCardID);
+			return Response.status(201).build();
+		}
+		return Response.status(401).build();
 	}
 	
 	/*

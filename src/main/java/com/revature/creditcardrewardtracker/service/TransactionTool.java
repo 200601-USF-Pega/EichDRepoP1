@@ -28,9 +28,7 @@ public class TransactionTool {
 			String username) {
 
 		Transaction transaction = new Transaction();
-		boolean belongsToUser = validation.permissionToModifyCard(username, cardID);
-
-		if (belongsToUser == true) {
+		if (validation.permissionToModifyCard(username, cardID)) {
 			transaction.setCardID(cardID);
 		} else {
 			return transaction;

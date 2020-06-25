@@ -16,7 +16,7 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 	//Connection ConnectionManager;
 
 
-	@Override
+	/*@Override
 	public CreditCard addCreditCard(String username, CreditCard card) {
 		//1. insert credit card to creditcards table
 		//2. add creditcardcategories to creditcardrewards table
@@ -43,6 +43,23 @@ public class CreditCardRepoDB implements ICreditCardRepo {
 			e.printStackTrace();
 		}
 		return null;
+	}*/
+	
+	@Override
+	public void addCreditCard(String username, CreditCard card) {
+		//1. insert credit card to creditcards table
+		//2. add creditcardcategories to creditcardrewards table
+	
+		try {
+			String query1 = "INSERT INTO creditcards (cardname, username) VALUES (?, ?)";
+			PreparedStatement creditCardStatement = ConnectionManager.getConnection().prepareStatement(query1, PreparedStatement.RETURN_GENERATED_KEYS);
+			creditCardStatement.setString(1,  card.getCreditCardName());
+			creditCardStatement.setString(2,  username);
+			creditCardStatement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@Override

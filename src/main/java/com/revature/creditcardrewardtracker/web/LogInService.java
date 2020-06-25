@@ -39,7 +39,7 @@ public class LogInService {
 	public Response logInVerification(
 			@FormParam("username") String username,
 			@FormParam("password") String password) {
-		if (validation.usernameExistsValidation(username) == true) {
+		if (validation.usernameExistsValidation(username)) {
 			String user = d.checkUser(username, password);
     		logger.info("User " + user + " successfully logged in.");
     		System.out.println(username + " logged in successfully.");
@@ -61,11 +61,11 @@ public class LogInService {
 	}
 	
 	public boolean adminVerification(String username) {
-		boolean isAdmin = d.checkAdmin(username);
-		if(isAdmin==true){
+		if(d.checkAdmin(username)){
 			logger.info("User " + username + " logged in as an admin.");
+			return true;
 		}
-		return isAdmin;
+		return false;
 		
 	}
 	
