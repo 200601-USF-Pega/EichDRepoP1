@@ -41,14 +41,15 @@ public class LogInService {
 		String username = user.getUsername();
 		String password = user.getPassword();
 		if (validation.usernameExistsValidation(username)) {
-			d.checkUser(username, password);
-    		logger.info("User " + user + " successfully logged in.");
-    		System.out.println(username + " logged in successfully.");
-			return Response.status(301).build();
+			if (d.checkUser(username, password)) {
+				logger.info("User " + user + " successfully logged in.");
+	    		System.out.println(username + " logged in successfully.");
+				return Response.status(301).build();
+			}
 		} else {
-			System.out.println("Username not found. Please try again.");
-			return Response.status(400).build();
+			System.out.println("Username" + username + " not found. Please try again.");
 		}
+		return Response.status(400).build();
 	}
 	
 	public boolean adminVerification(String username) {

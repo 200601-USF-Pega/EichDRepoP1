@@ -20,13 +20,16 @@
                     document.querySelector("#username").value = "";
                     document.querySelector("#password").value = "";
                 }
+                if (this.readyState == 4 && this.status > 299 && this.status < 400) {
+                  sessionStorage.setItem("username", user.username);
+                  location.href = 'managewallet.html';
+                }
             }
             
             req.open("POST", "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/LogInService/login", true);
             req.setRequestHeader('Content-Type', 'application/json');
             req.send(JSON.stringify(user));
-            sessionStorage.setItem("username", user.username);
-            location.href = 'managewallet.html';
+
       }
     </script>
 </head>

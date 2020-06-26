@@ -10,7 +10,7 @@ public interface IUserRepo {
 	
 	public boolean deleteUser(String username);
 	
-	public String checkUser(String username, String password);
+	public boolean checkUser(String username, String password);
 	
 	public boolean checkAdmin(String username);
 	

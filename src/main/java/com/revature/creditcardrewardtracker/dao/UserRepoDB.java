@@ -48,7 +48,7 @@ public class UserRepoDB implements IUserRepo {
 	}
 		
 	@Override
-	public String checkUser(String username, String password) {
+	public boolean checkUser(String username, String password) {
 		try {
 			Statement userStatement = ConnectionManager.getConnection().createStatement();
 			userStatement.executeQuery("SELECT * FROM users;");
@@ -57,10 +57,10 @@ public class UserRepoDB implements IUserRepo {
 			while (rs.next()) {
 				if (rs.getString("username").equalsIgnoreCase(username)) {
 					if (rs.getString("password").equals(password)) {
-						return username;
+						return true;
 					} else {
 						System.out.println("Wrong password");
-						return null;
+						return false;
 					}
 				}
 			}
@@ -69,7 +69,7 @@ public class UserRepoDB implements IUserRepo {
 			System.out.println("Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return null;
+		return false;
 	}
 	
 	public boolean checkAdmin(String username) {
