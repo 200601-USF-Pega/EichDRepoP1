@@ -126,7 +126,7 @@
                     document.querySelector("#username").value = "";
                 }
             }
-            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/AdminService/"+username+"/demote";
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/AdminService/"+username+"/changePassword";
             req.open("PUT", getURL , true);
             req.setRequestHeader("Content-Type", "application/json");
             req.send(JSON.stringify(user));
