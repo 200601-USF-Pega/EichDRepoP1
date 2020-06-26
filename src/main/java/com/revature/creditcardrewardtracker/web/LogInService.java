@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.revature.creditcardrewardtracker.dao.IUserRepo;
 import com.revature.creditcardrewardtracker.dao.UserRepoDB;
+import com.revature.creditcardrewardtracker.models.User;
 import com.revature.creditcardrewardtracker.service.ValidationService;
 
 //Logger code adapted from from: https://mkyong.com/logging/log4j-hello-world-example/
@@ -35,25 +36,15 @@ public class LogInService {
 	
 	@POST
 	@Path("/login")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response logInVerification(
-			@FormParam("username") String username,
-			@FormParam("password") String password) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response logInVerification(User user) {
+		String username = user.getUsername();
+		String password = user.getPassword();
 		if (validation.usernameExistsValidation(username)) {
 			String user = d.checkUser(username, password);
     		logger.info("User " + user + " successfully logged in.");
     		System.out.println(username + " logged in successfully.");
-    		/*String uribase = "http:localhost:8080/CreditCardRewardTrackerWeb/addcard.html?username="+username;
-    		URI targetURI;
-			try {
-				targetURI = new URI(uribase);
-				return Response.seeOther(targetURI).build();  
-			} catch (URISyntaxException e) {
-				e.getMessage();
-				e.printStackTrace();
-			}  		
-			*/
-    		return Response.status(301).build();
+			return Response.status(301).build();
 		} else {
 			System.out.println("Username not found. Please try again.");
 			return Response.status(400).build();

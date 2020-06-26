@@ -7,23 +7,29 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="CCRTMainStyle.css">
     <link rel="stylesheet" href="CCRTLoginStyle.css">
+    <script>
+      function storeUsername() {
+        let user = {};
+            user.username = document.querySelector("#username").value;
+            user.password = document.querySelector("#password").value;
+        
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#username").value = "";
+                    document.querySelector("#password").value = "";
+                }
+            }
+            
+            req.open("POST", "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/LogInService/login", true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(user));
+            sessionStorage.setItem("username", user.username);
+            location.href = 'managewallet.html';
+      }
+    </script>
 </head>
-<header>
-      <!--Navigation bar adapted from: https://www.w3schools.com/bootstrap/bootstrap_navbar.asp-->
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="#">Credit Card Reward Tracker</a>
-              </div>
-                <div><a href="#">Home</a></div>
-                <div class="active"><a href="addcard.html">Add Card</a></div>
-                <div><a href="addtransaction.html">Add Transaction</a></div>
-                <div><a href="#">Manage Wallet</a></div>
-                <div><a href="#">Manage Receipts</a></div>
-                <div><a href="homepage.html">Log Out</a></div>
-            </div>
-          </nav>
-</header>
 <body>
     <!--split screen style adapted from https://www.w3schools.com/howto/howto_css_split_screen.asp-->
     <div class="split left">
@@ -39,7 +45,6 @@
         <div class="leftalign">
             <h2>Log In</h2>
             <p>Please enter your log in information below.</p>
-            <form action="/CreditCardRewardTrackerWeb/tracker/LogInService/login" method="post">
                 <table>
                     <tr>
                         <td><label for="username">Username:</label></td>
@@ -51,8 +56,7 @@
                     </tr>
                 </table>
                 <br>
-                <input type="submit" value="Log In">
-            </form>
+            <input type="button" id="inpButton" value="Log In" onclick="storeUsername()">
             <br>
             <p>
                 New User? Sign up below!<br>

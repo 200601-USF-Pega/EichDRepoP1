@@ -13,25 +13,18 @@ public class UserTool {
 	public User createNewUser(String username, String password, String passwordVerify) {
 		User user = new User();
 
-		boolean hasUsername = false;
+		if (validation.usernameLengthValidation(username) == true) {
+			if (validation.usernameUniqueValidation(username) == true) {
+				user.setUsername(username);
+			}
+		}
 
-		while (hasUsername == false) {
-			if (validation.usernameLengthValidation(username) == true) {
-				if (validation.usernameUniqueValidation(username) == true) {
-					user.setUsername(username);
-					hasUsername = true;
-				}
+		if (password.equals(passwordVerify)) {
+			if (validation.passwordLengthValidation(password) == true) {
+				user.setPassword(password);
 			}
 		}
-		boolean hasPassword = false;
-		while (hasPassword == false) {
-			if (password.equals(passwordVerify)) {
-				if (validation.passwordLengthValidation(password) == true) {
-					hasPassword = true;
-					user.setPassword(password);
-				}
-			}
-		}
+
 		user.setAdmin(false);
 		System.out.println("User " + user.getUsername() + " successfully created.");
 		return user;
