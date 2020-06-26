@@ -65,6 +65,72 @@
           xhttp.open("GET", getURL , true);
           xhttp.send();
       }
+
+      function promoteUser() {
+        let user = {};
+        user.username = document.querySelector("#username").value;
+
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+            if (this.readyState > 3) {
+                document.querySelector("#username").value = "";
+            }
+        }
+        var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/AdminService/"+username+"/promote";
+        req.open("PUT", getURL , true);
+        req.setRequestHeader("Content-Type", "application/json");
+        req.send(JSON.stringify(user));
+      }
+
+      function demoteAdmin() {
+        let user = {};
+            user.username = document.querySelector("#username").value;
+  
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#username").value = "";
+                }
+            }
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/AdminService/"+username+"/demote";
+            req.open("PUT", getURL , true);
+            req.setRequestHeader("Content-Type", "application/json");
+            req.send(JSON.stringify(user));
+      }
+
+      function deleteUser() {
+        let user = {};
+            user.username = document.querySelector("#username").value;
+  
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#username").value = "";
+                }
+            }
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/AdminService/"+username+"/deleteuser";
+            req.open("DELETE", getURL , true);
+            req.setRequestHeader("Content-Type", "application/json");
+            req.send(JSON.stringify(user));
+      }
+
+      function changePassword() {
+        let user = {};
+            user.username = document.querySelector("#username").value;
+            user.password = document.querySelector("#password").value;
+  
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#username").value = "";
+                    document.querySelector("#username").value = "";
+                }
+            }
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/AdminService/"+username+"/demote";
+            req.open("PUT", getURL , true);
+            req.setRequestHeader("Content-Type", "application/json");
+            req.send(JSON.stringify(user));
+      }
     </script>
   </head>
   <body>
@@ -84,76 +150,21 @@
   <div class="row">
     <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="sidebar-sticky pt-3">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">
-              <span data-feather="home"></span>
-              Dashboard <span class="sr-only">(current)</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file"></span>
-              Orders
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="shopping-cart"></span>
-              Products
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="users"></span>
-              Customers
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="bar-chart-2"></span>
-              Reports
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="layers"></span>
-              Integrations
-            </a>
-          </li>
-        </ul>
-
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Saved reports</span>
-          <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-            <span data-feather="plus-circle"></span>
-          </a>
+          <span>Modify User</span>
         </h6>
         <ul class="nav flex-column mb-2">
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Current month
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Last quarter
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Social engagement
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">
-              <span data-feather="file-text"></span>
-              Year-end sale
-            </a>
-          </li>
+          <input type="text" id="username" name="username">
+          <input type="button" id="inpButton" value="Promote User to Admin" onClick="promoteUser()"> 
+          <input type="button" id="inpButton" value="Demote Admin to User" onClick="demoteAdmin()"> 
+          <input type="button" id="inpButton" value="Delete User" onClick="deleteUser()"> 
+        </ul>
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Change User Password</span>
+          </h6>
+        <ul class="nav flex-column mb-2">
+            <input type="text" id="password" name="password">
+            <input type="button" id="inpButton" value="Change User Password" onClick="changePassword()"> 
         </ul>
       </div>
     </nav>
@@ -162,7 +173,7 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
-          <input type="button" class="btn btn-sm btn-outline-secondary" onclick="getAllUsers()" value="Refresh Table"/>
+          <input type="button" class="btn btn-sm btn-outline-secondary" onclick="getAllUsers()" value="Refresh Table">
         </div>
       </div>
 
