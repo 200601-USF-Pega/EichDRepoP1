@@ -31,25 +31,22 @@ private static final Logger logger = Logger.getLogger(LogInService.class);
 	
 	@POST
 	@Path("/newuser")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response newUser(
-			@FormParam("username") String username,
-			@FormParam("password") String password,
-			@FormParam("reenter") String passwordVerify) throws URISyntaxException {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response newUser(User user) {
+		String username = user.getUsername();
+		String password = user.getPassword();
 		UserTool tool = new UserTool();
-		User user = tool.createNewUser(username, password, passwordVerify);
+		user = tool.createNewUser(username, password, password);
 		
 		if (user.getUsername()!=null) {
 			d.addUser(user);
 			logger.info("User " + user + " successfully created.");
     		System.out.println(username + " logged in successfully.");
-    		return Response.status(200).build();
-    		//String uribase = "http:localhost:8080/CreditCardRewardTrackerWeb/addcard/"+user.getUsername()+"/";
-    		//URI targetURI = new URI(uribase);
-    		//return Response.temporaryRedirect(targetURI).build();
+    		return Response.status(302).build();
+
 		} else {
 			System.out.println("User not created. Please try again.");
-			return Response.status(400).build();
+			return Response.status(403).build();
 		}
 	}
 }

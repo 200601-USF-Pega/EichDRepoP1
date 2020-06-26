@@ -28,7 +28,7 @@
                   sessionStorage.setItem("username", user.username);
                   location.href = 'adminhome.html';
                 }
-                if (this.status == 403) {
+                if (this.readyState == 4 && this.status == 403) {
                   alert("Username or password is incorrect. Please try again.");
                 }
             }
