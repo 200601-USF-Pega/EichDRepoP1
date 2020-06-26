@@ -27,16 +27,19 @@ public class UserRepoDB implements IUserRepo {
 	}
 
 	@Override
-	public List<String> getAllUsers() {
+	public List<User> getAllUsers() {
 		
-		List<String> listOfUsernames = new ArrayList<String>();
+		List<User> listOfUsernames = new ArrayList<User>();
 		try {
 			Statement s = ConnectionManager.getConnection().createStatement();
-			s.executeQuery("SELECT username FROM users;");
+			s.executeQuery("SELECT username, isadmin FROM users;");
 
 			ResultSet rs = s.getResultSet();
 			while (rs.next()) {
-				listOfUsernames.add(rs.getString("username"));
+				User tempUser = new User();
+				tempUser.setUsername(rs.getString("username"));
+				tempUser.setAdmin(rs.getBoolean("isadmin"));
+				listOfUsernames.add(tempUser);
 			}
 			
 			return listOfUsernames;

@@ -10,6 +10,7 @@ import com.revature.creditcardrewardtracker.dao.TransactionRepoDB;
 import com.revature.creditcardrewardtracker.dao.UserRepoDB;
 import com.revature.creditcardrewardtracker.models.CreditCard;
 import com.revature.creditcardrewardtracker.models.Transaction;
+import com.revature.creditcardrewardtracker.models.User;
 
 
 public class ValidationService {
@@ -20,9 +21,10 @@ public class ValidationService {
 	//returns false if used, true if new
 	public boolean usernameUniqueValidation(String username) {
 		IUserRepo ur = new UserRepoDB();
-		List<String> usernames = ur.getAllUsers();
+		List<User> users = ur.getAllUsers();
 		
-		for (String user : usernames) {
+		for (int i = 0; i < users.size(); i++) {
+			String user = users.get(i).getUsername();
 			if (user.equalsIgnoreCase(username)) {
 				System.out.println(username + " has already been used. Please select a different username.");
 				return false;
@@ -42,9 +44,10 @@ public class ValidationService {
 	
 	public boolean usernameExistsValidation(String username) {
 		IUserRepo ur = new UserRepoDB();
-		List<String> usernames = ur.getAllUsers();
+		List<User> users = ur.getAllUsers();
 		
-		for (String user : usernames) {
+		for (int i = 0; i < users.size(); i++) {
+			String user = users.get(i).getUsername();
 			if (user.equalsIgnoreCase(username)) {
 				return true;
 			}

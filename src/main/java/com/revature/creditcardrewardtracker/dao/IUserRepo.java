@@ -20,6 +20,6 @@ public interface IUserRepo {
 	
 	public boolean demoteAdmin(String username);
 	
-	public List<String> getAllUsers();
+	public List<User> getAllUsers();
 
 }
