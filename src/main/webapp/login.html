@@ -20,9 +20,16 @@
                     document.querySelector("#username").value = "";
                     document.querySelector("#password").value = "";
                 }
-                if (this.readyState == 4 && this.status > 299 && this.status < 400) {
+                if (this.readyState == 4 && this.status == 302) {
                   sessionStorage.setItem("username", user.username);
                   location.href = 'managewallet.html';
+                }
+                if (this.readyState == 4 && this.status == 303) {
+                  sessionStorage.setItem("username", user.username);
+                  location.href = 'adminhome.html';
+                }
+                if (this.status == 403) {
+                  alert("Username or password is incorrect. Please try again.");
                 }
             }
             

@@ -42,23 +42,26 @@ public class LogInService {
 		String password = user.getPassword();
 		if (validation.usernameExistsValidation(username)) {
 			if (d.checkUser(username, password)) {
+				if (this.adminVerification(username)) {
+					return Response.status(303).build();
+				}
 				logger.info("User " + user + " successfully logged in.");
 	    		System.out.println(username + " logged in successfully.");
-				return Response.status(301).build();
+				return Response.status(302).build();
 			}
 		} else {
 			System.out.println("Username" + username + " not found. Please try again.");
 		}
-		return Response.status(400).build();
+		return Response.status(403).build();
 	}
 	
 	public boolean adminVerification(String username) {
 		if(d.checkAdmin(username)){
+			System.out.println("Admin " + username + " successfully logged in.");
 			logger.info("User " + username + " logged in as an admin.");
 			return true;
 		}
 		return false;
-		
 	}
 	
 	
