@@ -41,7 +41,7 @@ public class LogInService {
 		String username = user.getUsername();
 		String password = user.getPassword();
 		if (validation.usernameExistsValidation(username)) {
-			String user = d.checkUser(username, password);
+			d.checkUser(username, password);
     		logger.info("User " + user + " successfully logged in.");
     		System.out.println(username + " logged in successfully.");
 			return Response.status(301).build();
