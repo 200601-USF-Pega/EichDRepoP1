@@ -11,6 +11,7 @@
     <script>
  		
         var transactions = [];
+        var username = sessionStorage.getItem("username");
 
         function getAllTransactions() {
             var xhttp = new XMLHttpRequest();
@@ -44,25 +45,9 @@
                     }
                 }
             };
-            xhttp.open("GET", "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/test2/list/all", true);
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/list/all";
+            xhttp.open("GET", getURL, true);
             xhttp.send();
-        }
-
-        function submitCard() {
-            let card = {};
-            card.creditCardName = document.querySelector("#cardName").value;
-        
-
-            var req = new XMLHttpRequest();
-            req.onreadystatechange = function() {
-                if (this.readyState > 3) {
-                    document.querySelector("#cardName").value = "";
-                }
-            }
-            
-            req.open("POST", "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardService/test2/new", true);
-            req.setRequestHeader('Content-Type', 'application/json');
-            req.send(JSON.stringify(card));
         }
 
         function deleteTransaction() {
@@ -77,7 +62,8 @@
                 }
             }
             
-            req.open("DELETE", "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/test2/remove", true);
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/remove";
+            req.open("DELETE", getURL, true);
             req.setRequestHeader('Content-Type', 'application/json');
             req.send(JSON.stringify(transaction));
         }
