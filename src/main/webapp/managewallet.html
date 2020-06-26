@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" href="CCRTMainStyle.css">
     <link rel="stylesheet" href="CCRTPageStyle.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto&display=swap" rel="stylesheet">
 
     <script>
  		
@@ -79,38 +80,49 @@
 </head>
 <header>
 <!--Navigation bar adapted from: https://www.w3schools.com/bootstrap/bootstrap_navbar.asp-->
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse" id="navb">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">Credit Card Reward Tracker</a>
+        <a class="navbar-brand">Credit Card Reward Tracker</a>
       </div>
-        <div><a href="#">Home</a></div>
-        <div><a href="addcard.html">Add Card</a></div>
-        <div><a href="addtransaction.html">Add Transaction</a></div>
-        <div class="active"><a href="managewallet.html">Manage Wallet</a></div>
-        <div><a href="managereceipts.html">Manage Receipts</a></div>
-        <div><a href="homepage.html">Log Out</a></div>
+        <div><a href="#" id="inactive">Home</a></div>
+        <div><a href="addcard.html" id="inactive">Add Card</a></div>
+        <div><a href="addtransaction.html" id="inactive">Add Transaction</a></div>
+        <div><a href="managewallet.html" id="active">Manage Wallet</a></div>
+        <div><a href="managereceipts.html" id="inactive">Manage Receipts</a></div>
+        <div><a href="homepage.html" id="inactive">Log Out</a></div>
     </div>
   </nav>
+  <div class="head">
+    <h1>
+        Manage Your Wallet
+    </h1>
+    <h3>
+        Your Wallet stores all of your different credit cards and corresponding reward categories.
+    </h3>
+  </div>
 </header>
-<body>
-    <table class="table table-striped table-hover" id="cardTable">
-        <thead>
-            <tr>
-                <th>Card ID</th>
-                <th>Card Name</th>
-            </tr>
-        </thead>
-        <tbody>
 
-        </tbody>
-    </table>
-    <br/> <br/>
-    <input type="button" onClick="getAllCards()" value="Get All Cards"/>
-    <br/> <br/>
-    <input type="text" id="cardName" />
-    <input type="button" id="inpButton" value="Add Card" onClick="submitCard()"/>
-    <input type="number" id="cardID" />
-    <input type="button" id="inpButton" value="Delete Card" onClick="deleteCard()"/>
+<body>
+    <div class="bod"> 
+        <table class="table table-striped table-hover" id="cardTable">
+            <thead class="theader">
+                <tr>
+                    <th>Card ID</th>
+                    <th>Card Name</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        <br/> <br/>
+        <input type="button" onClick="getAllCards()" value="Get All Cards"/>
+        <br/> <br/>
+        <input type="text" id="cardName" placeholder="Name of New Credit Card" required/>
+        <input type="button" id="inpButton" value="Add Card" onClick="submitCard()"/>
+        <input type="number" id="cardID" placeholder="ID Number of Credit Card to be Deleted" required/>
+        <input type="button" id="inpButton" value="Delete Card" onClick="deleteCard()"/>
+    </div>
 </body>
 </html>
