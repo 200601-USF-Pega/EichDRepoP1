@@ -19,6 +19,8 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status > 199) {
                     document.querySelectorAll("#cardTable tbody tr").forEach(function(e){e.remove()});
+                    document.querySelectorAll("#cardForm select option").forEach(function(e){e.remove()});
+
 
                     cards = JSON.parse(this.responseText);
                     let table = document.querySelector("#cardTable tbody");
@@ -33,7 +35,7 @@
                         nameCell.innerHTML = cards[i].creditCardName;
                     }
 
-                    /* Adapted from James Long at https://stackoverflow.com/questions/6601028/how-to-populate-the-options-of-a-select-element-in-javascript */
+                    /* Select form adapted from James Long at https://stackoverflow.com/questions/6601028/how-to-populate-the-options-of-a-select-element-in-javascript */
                     let select = document.querySelector("#cardForm select");
                     for (let i = 0; i < cards.length; ++i) {
                         var cardNameID = cards[i].creditCardID+" - "+cards[i].creditCardName;
@@ -97,13 +99,13 @@
 
         function deleteCard() {
             let card = {};
-            cardId = document.querySelector("#cardID").value;
+            cardId = document.querySelector("#cardIDCat").value;
         
 
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
                 if (this.readyState > 3) {
-                    document.querySelector("#cardID").value = "";
+                    document.querySelector("#cardIDCat").value = "";
                 }
             }
             
@@ -111,6 +113,25 @@
             req.open("DELETE", getURL, true);
             req.setRequestHeader('Content-Type', 'application/json');
             req.send(JSON.stringify(cardId));
+        }
+
+        function updateName() {
+            let card = {};
+            card.creditCardID = document.querySelector("#cardIDCat").value;
+            card.creditCardName = document.querySelector("#newName").value;
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#cardIDCat").value = "";
+                    document.querySelector("#newName").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardService/"+username+"/updatename";
+            req.open("PUT", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(card));
         }
  		
  	</script>
@@ -153,26 +174,26 @@
             </tbody>
         </table>
         <div class="btn-toolbar mb-2 mb-md-0" id="center">
-            <input type="button" onClick="getAllCards()" value="Get All Cards"/>
+            <input type="button" onClick="getAllCards()" value="Refresh Cards"/>
             <br> <br>
-            <input type="text" id="cardName" placeholder="Name of New Credit Card" required/>
+            <input type="text" id="cardName" placeholder="Card Name" required/>
             <input type="button" id="inpButton" value="Add Card" onClick="submitCard()"/>
-            <br> <br>
-            <input type="number" id="cardID" placeholder="Input Card ID" required/>
-            <input type="button" id="inpButton" value="Delete Card" onClick="deleteCard()"/>
+
         </div>
         <br>
-        <input type="text" id="cardIDCat" placeholder="Input Card ID">
-        <input type="button" onClick="getAllCategories()" value="Get All Categories"/>
        
         <form id="cardForm">
-            <label for="cards">Select a Card to View its Categories:</label>
+            <label for="cards">Select a Card to Modify:</label>
             <select name="cards" id="cardIDCat">
                 
             </select>
         </form>
-        <input type="button" onClick="getAllCategories()" value="Get All Categories"/>
-
+        <input type="button" onClick="getAllCategories()" value="View Categories"/>
+        <input type="button" id="inpButton" value="Delete Card" onClick="deleteCard()"/>
+        <br> <br>
+        <input type="text" id="newName" placeholder="Update Card Name" required/>
+        <input type="button" id="inpButton" value="Update Name" onClick="updateName()"/>
+        
         <table class="table table-striped table-hover" id="categoryTable">
             <thead class="theader">
                 <tr>
