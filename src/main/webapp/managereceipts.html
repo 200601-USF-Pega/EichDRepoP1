@@ -69,6 +69,8 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status > 199) {
                     document.querySelectorAll("#cardForm select option").forEach(function(e){e.remove()});
+                    document.querySelectorAll("#newCardForm select option").forEach(function(e){e.remove()});
+
 
                     cards = JSON.parse(this.responseText);
 
@@ -80,6 +82,15 @@
                         option.setAttribute('value', cards[i].creditCardID);
                         option.appendChild(document.createTextNode(cardNameID));
                         select.appendChild(option);
+                    }
+
+                    let select2 = document.querySelector("#newCardForm select");
+                    for (let i = 0; i < cards.length; ++i) {
+                        var cardNameID = cards[i].creditCardID+" - "+cards[i].creditCardName;
+                        let option = document.createElement('option');
+                        option.setAttribute('value', cards[i].creditCardID);
+                        option.appendChild(document.createTextNode(cardNameID));
+                        select2.appendChild(option);
                     }
                 }
             };
@@ -126,6 +137,86 @@
             
             var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/remove";
             req.open("DELETE", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(transaction));
+        }
+
+        function updateCategory() {
+            let transaction = {};
+            transaction.transactionId = document.querySelector("#transactionID").value;
+            transaction.category = document.querySelector("#newCategory").value;
+        
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#newCategory").value = "";
+                    document.querySelector("#transactionID").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/update/category";
+            req.open("PUT", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(transaction));
+        }
+
+        function updateDate() {
+            let transaction = {};
+            transaction.transactionId = document.querySelector("#transactionID").value;
+            var date = document.querySelector("#newDate").value;
+        
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#newDate").value = "";
+                    document.querySelector("#transactionID").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/update/date/"+date;
+            req.open("PUT", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(transaction));
+        }
+
+        function updateCardID() {
+            let transaction = {};
+            transaction.transactionId = document.querySelector("#transactionID").value;
+            transaction.cardID = document.querySelector("#newCardID").value;
+        
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#newCardID").value = "";
+                    document.querySelector("#transactionID").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/update/card";
+            req.open("PUT", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(transaction));
+        }
+
+        function updateTotal() {
+            let transaction = {};
+            transaction.transactionId = document.querySelector("#transactionID").value;
+            transaction.total = document.querySelector("#newTotal").value;
+        
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#newTotal").value = "";
+                    document.querySelector("#transactionID").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/update/total";
+            req.open("PUT", getURL, true);
             req.setRequestHeader('Content-Type', 'application/json');
             req.send(JSON.stringify(transaction));
         }
@@ -207,7 +298,29 @@
                 
             </select>
         </form>
+        <form>
+            <input type="text" id="newCategory" name="newCategory" placeholder="New Category" required>
+            <input type="button" id="inpButton" value="Update Category" onClick="updateCategory()"/>
+        </form>
+        <form>
+            <input type="date" id="newDate" name="newDate" required>
+            <input type="button" id="inpButton" value="Update Date" onClick="updateDate()"/>
+        </form>
+        <form id="newCardForm">
+            <label for="newCards">Credit Card Used:</label>
+            <select name="newCardID" id="newCardID" required>
+                
+            </select>
+            <input type="button" onClick="getAllCards()" value="Refresh">
+            <input type="button" id="inpButton" value="Update Card" onClick="updateCardID()"/>
+        </form>
+        <form>
+            <input type="number" id="newTotal" name="newTotal" min="0.00" placeholder="New Total" required>
+            <input type="button" id="inpButton" value="Update Total" onClick="updateTotal()"/>
+        </form>
+
         <input type="button" id="inpButton" value="Delete Transaction" onClick="deleteTransaction()"/>
     </div>
+    <br><br><br>
 </body>
 </html>

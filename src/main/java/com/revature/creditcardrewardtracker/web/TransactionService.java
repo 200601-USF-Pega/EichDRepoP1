@@ -139,7 +139,7 @@ public class TransactionService {
 	}
 	
 	@PUT
-	@Path("/update/cardid")
+	@Path("/update/card")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateTransactionCard(@PathParam("username") String username,
 			Transaction rTransaction) {
