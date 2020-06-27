@@ -4,6 +4,7 @@ public class CreditCardReward {
 	
 	private String categoryOfCashBack;
 	private double percentageOfCashBack;
+	private int categoryID;
 	
 	public CreditCardReward() {
 		
@@ -34,6 +35,14 @@ public class CreditCardReward {
 	public String toString() {
 		return '\n' + "Category = " + categoryOfCashBack + ", Cash Back Rate = "
 				+ percentageOfCashBack;
+	}
+
+	public int getCategoryID() {
+		return categoryID;
+	}
+
+	public void setCategoryID(int categoryID) {
+		this.categoryID = categoryID;
 	}
 
 }

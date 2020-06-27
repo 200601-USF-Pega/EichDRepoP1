@@ -59,6 +59,8 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status > 199) {
                     document.querySelectorAll("#categoryTable tbody tr").forEach(function(e){e.remove()});
+                    document.querySelectorAll("#categoryForm select option").forEach(function(e){e.remove()});
+
 
                     categories = JSON.parse(this.responseText);
                     let table = document.querySelector("#categoryTable tbody");
@@ -71,6 +73,16 @@
 
                         let rateCell = row.insertCell(1);
                         rateCell.innerHTML = (categories[i].percentageOfCashBack*100)+"%";
+                    }
+
+                    /* Select form adapted from James Long at https://stackoverflow.com/questions/6601028/how-to-populate-the-options-of-a-select-element-in-javascript */
+                    let select = document.querySelector("#categoryForm select");
+                    for (let i = 0; i < categories.length; ++i) {
+                        var categoryNameRate = categories[i].categoryID +" - "+ categories[i].categoryOfCashBack +" "+ (categories[i].percentageOfCashBack*100) +"%";
+                        let option = document.createElement('option');
+                        option.setAttribute('value', categories[i].categoryID);
+                        option.appendChild(document.createTextNode(categoryNameRate));
+                        select.appendChild(option);
                     }
                 }
             };
@@ -132,6 +144,90 @@
             req.open("PUT", getURL, true);
             req.setRequestHeader('Content-Type', 'application/json');
             req.send(JSON.stringify(card));
+        }
+
+        function submitCategory() {
+            let category = {};
+            var cardid = document.querySelector("#cardIDCat").value;
+            category.categoryOfCashBack = document.querySelector("#categoryName").value;
+            
+            var decimal = document.querySelector("#categoryRate").value/100;
+            category.percentageOfCashBack = decimal;
+        
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#categoryName").value = "";
+                    document.querySelector("#categoryRate").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardRewardService/"+username+"/"+cardid+"/new";
+            req.open("POST", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(category));
+        }
+
+        function updateCategoryName() {
+            let category = {};
+            var cardid = document.querySelector("#cardIDCat").value;
+            category.categoryOfCashBack = document.querySelector("#newCategoryName").value;
+            category.categoryID = document.querySelector("#categoryID").value;
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#categoryID").value = "";
+                    document.querySelector("#newCategoryName").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardRewardService/"+username+"/"+cardid+"/update/name";
+            req.open("PUT", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(category));
+        }
+
+        function updateCategoryRate() {
+            let category = {};
+            var cardid = document.querySelector("#cardIDCat").value;
+            var decimal = document.querySelector("#newCategoryRate").value/100;
+            category.percentageOfCashBack = decimal;
+            category.categoryID = document.querySelector("#categoryID").value;
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#categoryID").value = "";
+                    document.querySelector("#newCategoryRate").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardRewardService/"+username+"/"+cardid+"/update/rate";
+            req.open("PUT", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(category));
+        }
+
+        function deleteCategory() {
+            let card = {};
+            cardid = document.querySelector("#cardIDCat").value;
+            categoryId = document.querySelector("#categoryID").value;
+        
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#cardIDCat").value = "";
+                    document.querySelector("#categoryID").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardRewardService/"+username+"/"+cardid+"/remove";
+            req.open("DELETE", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(categoryId));
         }
  		
  	</script>
@@ -205,6 +301,26 @@
 
             </tbody>
         </table>
+        <br> <br>
+        <div class="btn-toolbar mb-2 mb-md-0" id="center">
+            <input type="text" id="categoryName" placeholder="Category Name" required/>
+            <input type="number" id="categoryRate" placeholder="Rate as x%"/>
+            <input type="button" id="inpButton" value="Add Category" onClick="submitCategory()"/>
+        </div>
+        <form id="categoryForm">
+            <label for="cards">Select a Category to Modify:</label>
+            <select name="category" id="categoryID">
+                
+            </select>
+        </form>
+        <br><br>
+        <div class="btn-toolbar mb-2 mb-md-0" id="center">
+            <input type="text" id="newCategoryName" placeholder="Update Category Name" required/>
+            <input type="button" id="inpButton" value="Update Name" onClick="updateCategoryName()"/>
+            <input type="number" id="newCategoryRate" placeholder="Update Rate as x%"/>
+            <input type="button" id="inpButton" value="Update Rate" onClick="updateCategoryRate()"/>
+            <input type="button" id="inpButton" value="Delete Category" onClick="deleteCategory()"/>
+        </div>
     </div>
 </body>
 </html>

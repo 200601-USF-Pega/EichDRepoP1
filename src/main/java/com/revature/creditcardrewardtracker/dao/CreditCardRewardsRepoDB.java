@@ -26,6 +26,7 @@ public class CreditCardRewardsRepoDB implements ICreditCardRewardsRepo {
 				CreditCardReward tempCat = new CreditCardReward();
 				tempCat.setCategoryOfCashBack(RSCats.getString("category"));
 				tempCat.setPercentageOfCashBack(RSCats.getDouble("percentageofcashback"));
+				tempCat.setCategoryID(RSCats.getInt("rewardid"));
 				categories.add(tempCat);
 			}
 		} catch (SQLException e) {

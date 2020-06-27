@@ -3,9 +3,10 @@ package com.revature.creditcardrewardtracker.web;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,7 +16,6 @@ import javax.ws.rs.core.Response;
 import com.revature.creditcardrewardtracker.dao.CreditCardRewardsRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRewardsRepo;
 import com.revature.creditcardrewardtracker.models.CreditCardReward;
-import com.revature.creditcardrewardtracker.service.CreditCardRewardTool;
 import com.revature.creditcardrewardtracker.service.ValidationService;
 
 @Path("/CreditCardRewardService/{username}/{cardid}")
@@ -32,14 +32,11 @@ public class CreditCardRewardService {
 	
 	@POST
 	@Path("/new")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addCreditCardReward(@PathParam("cardid") Integer cardId,
 			@PathParam("username") String username,
-			@FormParam("category") String category,
-			@FormParam("categoryrate") double rate) {
+			CreditCardReward reward) {
 		if (validation.permissionToModifyCard(username, cardId)) {
-			CreditCardRewardTool t = new CreditCardRewardTool();
-			CreditCardReward reward = t.createNewCashbackCategory(category, rate);
 			ccrr.addCashBackCategory(cardId, reward);
 			return Response.status(201).build();
 		}
@@ -57,6 +54,46 @@ public class CreditCardRewardService {
 		} 
 		return Response.status(400).build();
 	}
+	
+	@PUT
+	@Path("/update/name")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateCreditCardRewardName(@PathParam("cardid") Integer cardId, 
+			@PathParam("username") String username,
+			CreditCardReward reward) {
+		if (validation.permissionToModifyCard(username, cardId)) {
+			ccrr.updateCashBackCategory(reward.getCategoryID(), 0, reward.getCategoryOfCashBack());
+			return Response.status(201).build();
+		}
+		return Response.status(400).build();
+	}
+	
+	@PUT
+	@Path("/update/rate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateCreditCardRewardRate(@PathParam("cardid") Integer cardId, 
+			@PathParam("username") String username,
+			CreditCardReward reward) {
+		if (validation.permissionToModifyCard(username, cardId)) {
+			ccrr.updateCashBackCategory(reward.getCategoryID(), 1, reward.getPercentageOfCashBack());
+			return Response.status(201).build();
+		}
+		return Response.status(400).build();
+	}
+	
+	@DELETE
+	@Path("/remove")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response removeCreditcardReward(@PathParam("cardid") Integer cardId, 
+			@PathParam("username") String username,
+			int categoryId) {
+		if (validation.permissionToModifyCard(username, cardId)) {
+			ccrr.deleteCashBackCategory(categoryId);
+			return Response.status(201).build();
+		}
+		return Response.status(400).build();
+	}
+	
 	
 
 
