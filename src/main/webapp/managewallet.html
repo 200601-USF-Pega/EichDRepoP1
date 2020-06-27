@@ -32,6 +32,16 @@
                         let nameCell = row.insertCell(1);
                         nameCell.innerHTML = cards[i].creditCardName;
                     }
+
+                    /* Adapted from James Long at https://stackoverflow.com/questions/6601028/how-to-populate-the-options-of-a-select-element-in-javascript */
+                    let select = document.querySelector("#cardForm select");
+                    for (let i = 0; i < cards.length; ++i) {
+                        var cardNameID = cards[i].creditCardID+" - "+cards[i].creditCardName;
+                        let option = document.createElement('option');
+                        option.setAttribute('value', cards[i].creditCardID);
+                        option.appendChild(document.createTextNode(cardNameID));
+                        select.appendChild(option);
+                    }
                 }
             };
             var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardService/"+username+"/all";
@@ -154,6 +164,15 @@
         <br>
         <input type="text" id="cardIDCat" placeholder="Input Card ID">
         <input type="button" onClick="getAllCategories()" value="Get All Categories"/>
+       
+        <form id="cardForm">
+            <label for="cards">Select a Card to View its Categories:</label>
+            <select name="cards" id="cardIDCat">
+                
+            </select>
+        </form>
+        <input type="button" onClick="getAllCategories()" value="Get All Categories"/>
+
         <table class="table table-striped table-hover" id="categoryTable">
             <thead class="theader">
                 <tr>
