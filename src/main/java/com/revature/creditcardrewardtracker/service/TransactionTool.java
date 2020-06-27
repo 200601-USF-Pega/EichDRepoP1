@@ -47,6 +47,14 @@ public class TransactionTool {
 
 	}
 	
+	public LocalDate getLDFromStringDate(String date) {
+		// getting date from HTML to ld date from Basil Bourque at
+		// https://stackoverflow.com/questions/52410740/how-can-i-get-input-type-date-value-from-html-form-into-java-variable-and-sql
+		DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+		LocalDate ld = LocalDate.parse(date, f);
+		return ld;
+	}
+	
 	public double getTotalForCategories(String username, String category) {
 		List<Transaction> list = tr.listTransactionsForCategory(username, category.toUpperCase());
 		if (list.isEmpty()) {

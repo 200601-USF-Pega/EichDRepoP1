@@ -1,11 +1,13 @@
 package com.revature.creditcardrewardtracker.web;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -93,6 +95,56 @@ public class TransactionService {
 			int transactionID) {
 		if (validation.permissionToModifyTransaction(username, transactionID)) {
 			d.deleteTransaction(transactionID);
+			return Response.status(201).build();
+		}
+		return Response.status(401).build();
+	}
+	
+	@PUT
+	@Path("/update/date/{date}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateTransactionDate(@PathParam("username") String username,
+			@PathParam("date") String date,
+			Transaction rTransaction) {
+			LocalDate ld = t.getLDFromStringDate(date);
+			if (validation.permissionToModifyTransaction(username, rTransaction.getTransactionId())) {
+				d.updateTransaction(rTransaction.getTransactionId(), 1, ld);
+				return Response.status(201).build();
+			}
+			return Response.status(401).build();
+	}
+	
+	@PUT
+	@Path("/update/category")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateTransactionCategory(@PathParam("username") String username,
+			Transaction rTransaction) {
+		if (validation.permissionToModifyTransaction(username, rTransaction.getTransactionId())) {
+			d.updateTransaction(rTransaction.getTransactionId(), 2, rTransaction.getCategory());
+			return Response.status(201).build();
+		}
+		return Response.status(401).build();
+	}
+	
+	@PUT
+	@Path("/update/total")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateTransactionTotal(@PathParam("username") String username,
+			Transaction rTransaction) {
+		if (validation.permissionToModifyTransaction(username, rTransaction.getTransactionId())) {
+			d.updateTransaction(rTransaction.getTransactionId(), 3, rTransaction.getTotal());
+			return Response.status(201).build();
+		}
+		return Response.status(401).build();
+	}
+	
+	@PUT
+	@Path("/update/cardid")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateTransactionCard(@PathParam("username") String username,
+			Transaction rTransaction) {
+		if (validation.permissionToModifyTransaction(username, rTransaction.getTransactionId())) {
+			d.updateTransaction(rTransaction.getTransactionId(), 4, rTransaction.getCardID());
 			return Response.status(201).build();
 		}
 		return Response.status(401).build();

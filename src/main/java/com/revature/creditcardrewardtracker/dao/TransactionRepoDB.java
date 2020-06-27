@@ -170,8 +170,8 @@ public class TransactionRepoDB implements ITransactionRepo {
 				switch (option) {
 					case (1) :
 						//date
-						java.util.Date date = (java.util.Date) obj;
-						java.sql.Date sqlDate = convertUtilToSQLDate(date);
+						java.time.LocalDate date = (java.time.LocalDate) obj;
+						java.sql.Date sqlDate = convertLocalToSQLDate(date);
 						s.executeUpdate("UPDATE transactionrecords AS t " +
 								"SET date = '" + sqlDate + "' WHERE t.transactionid = " + transactionId + ";");	
 						System.out.println("Date update executed.");
