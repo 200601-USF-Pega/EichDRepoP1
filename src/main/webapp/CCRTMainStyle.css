@@ -1,44 +1,50 @@
+#navb {
+    background-color: #262626;
+    color: #F2F2F2;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: x-large;
+}
+
+.navbar-brand {
+    font-size: xx-large;
+}
+
+#active {
+    color: #F2F2F2;
+}
+#inactive {
+    color: #8898F2;
+}
+.head {
+    padding-top: 20px;
+    padding-bottom: 15px;
+    background-color: #5068F2;
+    color: #F2F2F2;   
+}
+
+h1 {
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+h3 {
+    font-family: 'Roboto', sans-serif;
+    font-size: large;
+}
+
+.bod {
+    padding-left: 20px;
+    padding-right: 5px;
+    font-family: 'Roboto', sans-serif;
+}
+
 img {
     max-width: 50%;
     height: auto;
     box-align: center;
 }
 
-body {
-    background-color: #F2F2F2;
-    color:#262626;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-
 div {
     text-align: center;
-}
-
-.bold {
-    font-weight: bolder;
-}
-
-.container-fluid {
-    color: #F2F2F2
-}
-
-.active {
-    color: #F2F2F2;
-    text-emphasis: bold;
-}
-
-p {
-    padding-bottom: 20px;
-}
-
-.navbar {
-    background-color: #262626;
-    color: #F2F2F2;
-}
-
-.nav {
-    color:#8898F2;
-    text-emphasis: bold;
 }
 
 .center {
@@ -48,3 +54,9 @@ p {
     max-width: 75%;
 }
 
+#center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 75%;
+}

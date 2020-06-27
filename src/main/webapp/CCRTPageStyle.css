@@ -1,54 +1,18 @@
-#navb {
-    background-color: #262626;
-    color: #F2F2F2;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: x-large;
-}
-
-.navbar-brand {
-    font-size: xx-large;
-}
-
-#active {
-    color: #F2F2F2;
-}
-#inactive {
-    color: #8898F2;
-}
-.head {
-    padding-top: 20px;
-    padding-bottom: 15px;
-    background-color: #5068F2;
-    color: #F2F2F2;
-    
-}
-
-h1 {
-    font-family: 'Bebas Neue', sans-serif;
-}
-
-h3 {
-    font-family: 'Roboto', sans-serif;
-    font-size: large;
-}
-
-
-.bod {
-    padding-left: 20px;
-    padding-right: 5px;
-    font-family: 'Roboto', sans-serif;
-}
-
 .theader {
     font-size: larger;
     margin-left: 10px;
     margin-right: 10px;
 }
 
-#cardTable {
+#cardTable, #categoryTable, #transactionTable {
     width: 60%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 20px;
+}
 
+#categoryTable {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 

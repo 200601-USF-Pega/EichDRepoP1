@@ -50,8 +50,8 @@ public class CreditCardRewardService {
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllCreditRewards(@PathParam("cardid") Integer cardId, 
-			@PathParam("username") String username) {
+	public Response getAllCreditRewards(@PathParam("username") String username, 
+			@PathParam("cardid") Integer cardId) {
 		if (validation.permissionToModifyCard(username, cardId)) {
 			return Response.ok((ArrayList<CreditCardReward>)ccrr.getCashBackCategories(cardId)).build();
 		} 
