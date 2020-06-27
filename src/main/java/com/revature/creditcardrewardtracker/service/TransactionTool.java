@@ -24,7 +24,7 @@ public class TransactionTool {
 		tr = new TransactionRepoDB();
 	}
 
-	public Transaction createNewTransaction(int cardID, String htmlDate, String category, double total,
+	public Transaction createNewTransaction(int cardID, String date, String category, double total,
 			String username) {
 
 		Transaction transaction = new Transaction();
@@ -36,8 +36,8 @@ public class TransactionTool {
 
 		// getting date from HTML to ld date from Basil Bourque at
 		// https://stackoverflow.com/questions/52410740/how-can-i-get-input-type-date-value-from-html-form-into-java-variable-and-sql
-		DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-		LocalDate ld = LocalDate.parse(htmlDate, f);
+		DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+		LocalDate ld = LocalDate.parse(date, f);
 
 		transaction.setDate(ld);
 		transaction.setCategory(category.toUpperCase());

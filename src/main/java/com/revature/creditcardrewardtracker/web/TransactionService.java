@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -34,14 +33,12 @@ public class TransactionService {
 	}
 	
 	@POST
-	@Path("/add")
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Path("/{date}/add")
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addTransaction(@PathParam("username") String username,
-			@FormParam("cardid") int cardID,
-			@FormParam("category") String category,
-			@FormParam("purchasedate") String date,
-			@FormParam("total") double total) {
-		Transaction transaction = t.createNewTransaction(cardID, date, category, total, username);
+			@PathParam("date") String date,
+			Transaction rTransaction) {
+		Transaction transaction = t.createNewTransaction(rTransaction.getCardID(), date, rTransaction.getCategory(), rTransaction.getTotal(), username);
 		d.addTransaction(transaction);
 		return Response.status(201).build();
 	}

@@ -15,7 +15,11 @@ public class Transaction {
 		
 	}
 
-	public LocalDate getDate() {
+	public Object getDate() {
+		return date;
+	}
+	
+	public LocalDate getLDate() {
 		return date;
 	}
 	

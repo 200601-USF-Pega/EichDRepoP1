@@ -27,7 +27,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 					+ "transactionrecords(date, category, transactiontotal, "
 					+ "cashbacktotal, cardid) VALUES (?, ?, ?, ?, ?)");
 						
-			s.setDate(1, convertLocalToSQLDate(newTransaction.getDate()));
+			s.setDate(1, convertLocalToSQLDate(newTransaction.getLDate()));
 			s.setString(2, newTransaction.getCategory());
 			s.setDouble(3,  newTransaction.getTotal());
 			s.setDouble(4,  newTransaction.getCashBackTotal());

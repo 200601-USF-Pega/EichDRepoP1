@@ -215,11 +215,9 @@
             cardid = document.querySelector("#cardIDCat").value;
             categoryId = document.querySelector("#categoryID").value;
         
-
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
                 if (this.readyState > 3) {
-                    document.querySelector("#cardIDCat").value = "";
                     document.querySelector("#categoryID").value = "";
                 }
             }
@@ -299,7 +297,6 @@
 
             </tbody>
         </table>
-        <br> <br>
         <div class="btn-toolbar mb-2 mb-md-0" id="center">
             <input type="button" onClick="getAllCategories()" value="Refresh Categories"/>
             <br><br>

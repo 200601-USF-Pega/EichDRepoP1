@@ -19,6 +19,7 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status > 199) {
                     document.querySelectorAll("#transactionTable tbody tr").forEach(function(e){e.remove()});
+                    document.querySelectorAll("#transactionForm select option").forEach(function(e){e.remove()});
 
                     transactions = JSON.parse(this.responseText);
                     let table = document.querySelector("#transactionTable tbody");
@@ -44,11 +45,71 @@
                         let cashBackCell = row.insertCell(5);
                         cashBackCell.innerHTML = '$' + transactions[i].cashBackTotal.toFixed(2);
                     }
+
+                    /* Select form adapted from James Long at https://stackoverflow.com/questions/6601028/how-to-populate-the-options-of-a-select-element-in-javascript */
+                    let select = document.querySelector("#transactionForm select");
+                    for (let i = 0; i < transactions.length; ++i) {
+                        var transactionIDCategoryTotal = transactions[i].transactionId+": "+transactions[i].category + " $" + transactions[i].total.toFixed(2);
+                        let option = document.createElement('option');
+                        option.setAttribute('value', transactions[i].transactionId);
+                        option.appendChild(document.createTextNode(transactionIDCategoryTotal));
+                        select.appendChild(option);
+                    }
                 }
             };
             var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/list/all";
             xhttp.open("GET", getURL, true);
             xhttp.send();
+        }
+
+        var cards = [];
+
+        function getAllCards() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199) {
+                    document.querySelectorAll("#cardForm select option").forEach(function(e){e.remove()});
+
+                    cards = JSON.parse(this.responseText);
+
+                    /* Select form adapted from James Long at https://stackoverflow.com/questions/6601028/how-to-populate-the-options-of-a-select-element-in-javascript */
+                    let select = document.querySelector("#cardForm select");
+                    for (let i = 0; i < cards.length; ++i) {
+                        var cardNameID = cards[i].creditCardID+" - "+cards[i].creditCardName;
+                        let option = document.createElement('option');
+                        option.setAttribute('value', cards[i].creditCardID);
+                        option.appendChild(document.createTextNode(cardNameID));
+                        select.appendChild(option);
+                    }
+                }
+            };
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardService/"+username+"/all";
+            xhttp.open("GET", getURL , true);
+            xhttp.send();
+        }
+
+        function submitTransaction() {
+            let transaction = {};
+            transaction.cardID = document.querySelector("#cardID").value;
+            transaction.category = document.querySelector("#category").value;
+            var date = document.querySelector("#purchasedate").value;
+            transaction.total = document.querySelector("#total").value;
+        
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState > 3) {
+                    document.querySelector("#cardID").value = "";
+                    document.querySelector("#category").value = "";
+                    document.querySelector("#purchasedate").value = "";
+                    document.querySelector("#total").value = "";
+                }
+            }
+            
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/"+date+"/add";
+            req.open("POST", getURL, true);
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(JSON.stringify(transaction));
         }
 
         function deleteTransaction() {
@@ -90,7 +151,7 @@
             Manage Your Receipts
         </h1>
         <h3>
-            Your Receipts store all of your transaction records and record your savings.
+            Receipts store all of your transaction records and record your savings.
         </h3>
     </div>
 </header>
@@ -112,9 +173,40 @@
     </table>
     <br/> <br/>
     <div class="btn-toolbar mb-2 mb-md-0" id="center">
-        <input type="button" onClick="getAllTransactions()" value="Get All Transactions"/>
+        <input type="button" onClick="getAllTransactions()" value="Refresh Transactions"/>
         <br/> <br/>
-        <input type="number" id="transactionID" />
+        <h6>
+            Add a New Transaction
+        </h6>
+        <form id="cardForm">
+            <label for="cards">Credit Card Used:</label>
+            <select name="card" id="cardID" required>
+                
+            </select>
+            <input type="button" onClick="getAllCards()" value="Refresh">
+        </form>
+        <form id="newTransaction">
+            <label for="category">Category of Purchase:</label>
+            <input type="text" id="category" name="category" required>
+            <br>
+            <label for="purchasedate">Date of Purchase:</label>
+            <input type="date" id="purchasedate" name="purchasedate" required>
+            <br>
+            <label for="total">Total Spent: $</label>
+            <input type="number" id="total" name="total" min="0.00" required>
+            <br>
+        </form>
+        <input type="button" onClick="submitTransaction()" value="Submit Transaction">
+        <br>
+        <h6>
+            Modify Transaction Record
+        </h6>
+        <form id="transactionForm">
+            <label for="transactions">Select a Transaction to Modify:</label>
+            <select name="transaction" id="transactionID">
+                
+            </select>
+        </form>
         <input type="button" id="inpButton" value="Delete Transaction" onClick="deleteTransaction()"/>
     </div>
 </body>
