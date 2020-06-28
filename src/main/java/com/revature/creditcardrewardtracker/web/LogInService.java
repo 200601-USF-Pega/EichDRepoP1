@@ -42,7 +42,6 @@ public class LogInService {
 					return Response.status(303).build();
 				}
 				log.info("User " + user.getUsername() + " successfully logged in.");
-	    		//System.out.println(username + " logged in successfully.");
 				return Response.status(302).build();
 			}
 		} else {
@@ -53,7 +52,6 @@ public class LogInService {
 	
 	public boolean adminVerification(String username) {
 		if(d.checkAdmin(username)){
-			//System.out.println("Admin " + username + " successfully logged in.");
 			log.info("User " + username + " logged in as an admin.");
 			return true;
 		}

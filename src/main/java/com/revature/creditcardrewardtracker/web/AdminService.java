@@ -7,9 +7,12 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.log4j.Logger;
 
 import com.revature.creditcardrewardtracker.dao.IUserRepo;
 import com.revature.creditcardrewardtracker.dao.UserRepoDB;
@@ -21,6 +24,8 @@ public class AdminService {
 
 	private IUserRepo d;
 	private ValidationService validation;
+	private static final Logger log = Logger.getLogger(LogInService.class);
+
 
 	public AdminService() {
 		d = new UserRepoDB();
@@ -37,40 +42,40 @@ public class AdminService {
 	@PUT
 	@Path("/changePassword")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response changeUserPassword(User user) {
+	public Response changeUserPassword(@PathParam("username") String admin, User user) {
 		String username = user.getUsername();
 		String newPassword = user.getPassword();
 		if (validation.usernameExistsValidation(username)) {
 			if (validation.passwordLengthValidation(newPassword)) {
 				boolean result = d.changePassword(username, newPassword);
 				if (result == true) {
-					System.out.println(username + " password's updated.");
+					log.info("User " + user.getUsername() + "'s password updated by admin " + admin+".");
 					return Response.status(201).build();
 				}
-				System.out.println(username + " password not changed.");
+				log.error("Failed to update User " + user.getUsername() + "'s password by admin " + admin+".");
 				return Response.status(403).build();
 			}
 		} 
-		System.out.println("User " + username + " not found.");
+		log.warn("User " + username + " was NOT found and the password was NOT updated by admin " + admin+".");
 		return Response.status(403).build();
 	}
 	
 	@DELETE
 	@Path("/deleteuser")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response deleteUserAccount(User user) {
+	public Response deleteUserAccount(@PathParam("username") String admin, User user) {
 		String username = user.getUsername();
 		if (validation.usernameExistsValidation(username)) {
 			boolean result = d.deleteUser(username);
 			if (result == true) {
-				System.out.println(username + "'s account deleted.");
+				log.warn("User " + user.getUsername() + "'s account deleted by admin " + admin+".");
 				return Response.status(201).build();
 			} else {
-				System.out.println(username + "'s account not deleted.");
+				log.error("Failed to delete User " + user.getUsername() + "'s account by admin " + admin+".");
 				return Response.status(403).build();
 			}
 		} else {
-			System.out.println("User " + username + " not found.");
+			log.warn("User " + user.getUsername() + "'s account attempted to be deleted by admin " + admin+", but was not found.");
 			return Response.status(403).build();
 		}
 	}
@@ -78,19 +83,19 @@ public class AdminService {
 	@PUT
 	@Path("/promote")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response promoteUserAccount(User user) {
+	public Response promoteUserAccount(@PathParam("username") String admin, User user) {
 		String username = user.getUsername();
 		if (validation.usernameExistsValidation(username)) {
 			boolean result = d.promoteAdmin(username);
 			if (result == true) {
-				System.out.println(username + " promoted to admin successfully.");
+				log.info("User " + username + " promoted to admin by admin " + admin+".");
 				return Response.status(201).build();
 			} else {
-				System.out.println(username + " not promoted to admin.");
+				log.error("Failed to promote user " + username + " to admin by admin " + admin+".");
 				return Response.status(403).build();
 			}
 		} else {
-			System.out.println("User " + username + " not found.");
+			log.warn("User " + username + " was NOT found and NOT promoted to admin by admin " + admin+".");
 			return Response.status(403).build();
 		}
 	}
@@ -98,19 +103,19 @@ public class AdminService {
 	@PUT
 	@Path("/demote")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response demoteUserAccount(User user) {
+	public Response demoteUserAccount(@PathParam("username") String admin, User user) {
 		String username = user.getUsername();
 		if (validation.usernameExistsValidation(username)) {
 			boolean result = d.demoteAdmin(username);
 			if (result == true) {
-				System.out.println(username + " demoted to standard account successfully.");
+				log.info("Admin " + username + " demoted to user by admin " + admin+".");
 				return Response.status(201).build();
 			} else {
-				System.out.println(username + " not demoted to standard account.");
+				log.error("Failed to demote admin " + username + " to user by admin " + admin+".");
 				return Response.status(403).build();
 			}
 		} else {
-			System.out.println("User " + username + " not found.");
+			log.warn("User " + username + " was NOT found and NOT demoted to user by admin " + admin+".");
 			return Response.status(403).build();
 		}
 	}
