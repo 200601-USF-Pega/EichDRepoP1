@@ -89,6 +89,26 @@ public class TransactionTool {
 		return 0;
 	}
 	
+	public double getTotalForDateRange(String username, LocalDate date1, LocalDate date2) {
+
+		List<Transaction> list = tr.listTransactionsForDateRange(username, date1,
+				date2);
+
+		return calculateTotalFromList(list);
+	}
+
+	public double getTotalCashBack(String username) {
+		List<Transaction> list = tr.listTransactions(username);
+		return calculateTotalCashBackFromList(list);
+	}
+
+	public double getTotalCashBackForDateRange(String username, LocalDate date1, LocalDate date2) {
+		List<Transaction> list = tr.listTransactionsForDateRange(username, date1,
+				date2);
+
+		return calculateTotalCashBackFromList(list);
+	}
+	
 	private double calculateCashBack(Transaction transaction, String username) {
 		int card = transaction.getCardID();
 		double rate = 0.0;
@@ -141,129 +161,7 @@ public class TransactionTool {
 		return total;
 	}
 
-	/*
-	public List<Transaction> getUserTransactions() {
-		List<Transaction> list = d.listTransactions(username);
-		return list;
-	}
-
-	public void printUserTransactions() {
-		d.printResultSet(username);
-	}
-
-	public void updateTransaction() {
-		int id = null;
-		if (validation.permissionToModifyTransaction(username, id) == true) {
-				int option = null;
-				switch (option) {
-				case (1):
-					// date
-					System.out.println("What date would you like to change it to? Please use the YYYYMMDD format.");
-					int intDate = null;
-					java.util.Date newDate = convertIntToDate(intDate);
-					d.updateTransaction(id, option, newDate);
-					break;
-				case (2):
-					// category
-					sc.nextLine();
-					System.out.println("What category would you like to change it to?");
-					String newCat = sc.nextLine().toUpperCase();
-					d.updateTransaction(id, option, newCat);
-					break;
-				case (3):
-					// transaction total
-					System.out.println("What is the new Transaction Total?");
-					double total = inputValidation.getValidDouble();
-					d.updateTransaction(id, option, total);
-					break;
-				case (4):
-					// card
-					System.out.println("What is the new Card ID?");
-					System.out.println(ccr.getCreditCards(username));
-					int cardID = inputValidation.getValidInt();
-					boolean belongsToUser = validation.permissionToModifyCard(username, cardID);
-					if (belongsToUser == true) {
-						d.updateTransaction(id, option, cardID);
-					}
-					break;
-				default:
-					System.out.println("Invalid input");
-				}
-				d.printResultSet(username);
-			}
-		}
-	}
-
-	public double getTotalForDateRange() {
-
-		System.out.println("What is the start date for your date range? Please use YYYYMMDD format.");
-		int date1 = inputValidation.getValidDate();
-		System.out.println("What is the end date for your date range? Please use YYYYMMDD format.");
-		int date2 = inputValidation.getValidDate();
-
-		List<Transaction> list = d.listTransactionsForDateRange(username, convertIntToDate(date1),
-				convertIntToDate(date2));
-
-		return calculateTotalFromList(list);
-	}
-
-	public double getTotalCashBack() {
-		List<Transaction> list = d.listTransactions(username);
-		return calculateTotalCashBackFromList(list);
-	}
-
-	public double getTotalCashBackForDateRange() {
-
-		System.out.println("What is the start date for your date range? Please use YYYYMMDD format.");
-		int date1 = inputValidation.getValidDate();
-		System.out.println("What is the end date for your date range? Please use YYYYMMDD format.");
-		int date2 = inputValidation.getValidDate();
-
-		List<Transaction> list = d.listTransactionsForDateRange(username, convertIntToDate(date1),
-				convertIntToDate(date2));
-
-		return calculateTotalCashBackFromList(list);
-	}
-
-	public void removeTransaction() {
-		d.listTransactions(username);
-
-		System.out.println("Please input the Transaction ID for the transaction to be deleted.");
-		d.printResultSet(username);
-		int option = inputValidation.getValidInt();
-
-		boolean belongsToUser = validation.permissionToModifyTransaction(username, option);
-
-		if (belongsToUser == true) {
-			System.out.println("You selected Transaction ID " + option + " to delete. Enter YES to confirm.");
-			if (sc.next().equalsIgnoreCase("YES")) {
-				d.deleteTransaction(option);
-			} else {
-				System.out.println("Transaction will not be removed.");
-			}
-		}
-	}
 
 	
-
-	private static java.util.Date convertIntToDate(int yyyymmdd) {
-		Integer rawDate = (Integer) yyyymmdd;
-		String stringDate = rawDate.toString();
-		java.util.Date date = null;
-
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-
-		try {
-			date = format.parse(stringDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return date;
-	}
-
-	
-	*/
 
 }

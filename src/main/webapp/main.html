@@ -68,6 +68,7 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status > 199) {
                     document.querySelectorAll("#cardForm select option").forEach(function(e){e.remove()});
+                    document.querySelectorAll("#cardFormSavings select option").forEach(function(e){e.remove()});
 
                     cards = JSON.parse(this.responseText);
 
@@ -80,9 +81,94 @@
                         option.appendChild(document.createTextNode(cardNameID));
                         select.appendChild(option);
                     }
+
+                    let select2 = document.querySelector("#cardFormSavings select");
+                    for (let i = 0; i < cards.length; ++i) {
+                        var cardNameID = cards[i].creditCardID+" - "+cards[i].creditCardName;
+                        let option = document.createElement('option');
+                        option.setAttribute('value', cards[i].creditCardID);
+                        option.appendChild(document.createTextNode(cardNameID));
+                        select2.appendChild(option);
+                    }
                 }
             };
             var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardService/"+username+"/all";
+            xhttp.open("GET", getURL , true);
+            xhttp.send();
+        }
+
+        function byCard() {
+            var xhttp = new XMLHttpRequest();
+            var cardid = document.querySelector("#cardIDSavings").value;
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199) {
+                    document.querySelectorAll("#savings tbody tr").forEach(function(e){e.remove()});
+
+                    results = JSON.parse(this.responseText);
+                    let table = document.querySelector("#savings tbody");
+
+                    for (let i = 0; i < 1; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let savingsCell = row.insertCell(0); 
+                        savingsCell.innerHTML = "$"+results[i].toFixed(2);
+                        let totalCell = row.insertCell(1);
+                        totalCell.innerHTML = "$"+results[i+1].toFixed(2);
+                    }
+                }
+            };
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/total/card/"+cardid;
+            xhttp.open("GET", getURL , true);
+            xhttp.send();
+        }
+
+        function byCategory() {
+            var xhttp = new XMLHttpRequest();
+            var category = document.querySelector("#categorySavings").value;
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199) {
+                    document.querySelectorAll("#savings tbody tr").forEach(function(e){e.remove()});
+
+                    results = JSON.parse(this.responseText);
+                    let table = document.querySelector("#savings tbody");
+
+                    for (let i = 0; i < 1; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let savingsCell = row.insertCell(0); 
+                        savingsCell.innerHTML = "$"+results[i].toFixed(2);
+                        let totalCell = row.insertCell(1);
+                        totalCell.innerHTML = "$"+results[i+1].toFixed(2);
+                    }
+                }
+            };
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/total/category/"+category;
+            xhttp.open("GET", getURL , true);
+            xhttp.send();
+        }
+
+        function byDate() {
+            var xhttp = new XMLHttpRequest();
+            var startDate = document.querySelector("#startDate").value;
+            var endDate = document.querySelector("#endDate").value;
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199) {
+                    document.querySelectorAll("#savings tbody tr").forEach(function(e){e.remove()});
+
+                    results = JSON.parse(this.responseText);
+                    let table = document.querySelector("#savings tbody");
+
+                    for (let i = 0; i < 1; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let savingsCell = row.insertCell(0); 
+                        savingsCell.innerHTML = "$"+results[i].toFixed(2);
+                        let totalCell = row.insertCell(1);
+                        totalCell.innerHTML = "$"+results[i+1].toFixed(2);
+                    }
+                }
+            };
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/TransactionService/"+username+"/total/date/"+startDate+"/"+endDate;
             xhttp.open("GET", getURL , true);
             xhttp.send();
         }
@@ -126,7 +212,7 @@
             </table>
         </div>
         <h2>
-           Calculate Potential Savings 
+           Calculate Potential Earnings 
         </h2>
         <h3>The tool below can automatically calculate the price you'll pay after savings from a card. Fill out the information below to get started.</h3>
         <div class="bod">
@@ -148,7 +234,51 @@
                 </tbody>
             </table>
         </div>
+        <h2>
+            See the Savings 
+         </h2>
+         <h3>The proof is in the pudding. Use the different options below to see how much you've saved and spent.</h3>
+         <table id="savings">
+            <thead>
+                <tr>
+                    <th>Total Saved</th>
+                    <th>Total Spent</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+         <div class="bod">
+            <form id="cardFormSavings">
+                <h7>View for Credit Card:</h7>
+                <br>
+                <label for="cards">Card:</label>
+                <select name="card" id="cardIDSavings" required>
+                    
+                </select>
+                <input type="button" onClick="getAllCards()" value="Refresh">
+                <input type="button" onClick="byCard()" value="View by Card">
+            </form>
+            <br>
+            <form>
+                <h7>View for Category:</h7>
+                <br>
+                <input type="text" id="categorySavings" placeholder="Category" required>
+                <input type="button" id="inpButton" value="View by Category" onClick="byCategory()"/>
+            </form>
+            <br>
+            <form>
+                <h7>View for Date Range (enter start date and end date):</h7>
+                <br>
+                <input type="date" id="startDate" label="Start Date" required>
+                <input type="date" id="endDate" label="End Date" required>
+                <input type="button" id="inpButton" value="View By Date" onClick="byDate()"/>
+            </form>
+        </div>
     </div>
-    
+    <br>
+    <br>
+    <br>
 </body>
 </html>

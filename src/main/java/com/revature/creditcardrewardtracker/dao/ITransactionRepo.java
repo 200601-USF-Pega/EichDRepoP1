@@ -18,7 +18,7 @@ public interface ITransactionRepo {
 	
 	public List<Transaction> listTransactionsForCreditCard(String username, int cardID);
 	
-	public List<Transaction> listTransactionsForDateRange(String username, java.util.Date startDate, java.util.Date endDate);
+	public List<Transaction> listTransactionsForDateRange(String username, java.time.LocalDate startDate, java.time.LocalDate endDate);
 
 	public void printResultSet(String username);
 

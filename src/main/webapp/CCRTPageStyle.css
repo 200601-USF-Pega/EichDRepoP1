@@ -4,15 +4,20 @@
     margin-right: 10px;
 }
 
-#cardTable, #categoryTable, #transactionTable, #calculator {
+#cardTable, #categoryTable, #transactionTable, #calculator, #savings {
     width: 60%;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 20px;
 }
 
-#categoryTable, #calculator {
+#categoryTable, #calculator, #savings {
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
+#savings {
+    font-size: xx-large;
+    font-family: 'Bebas Neue', sans-serif;
+
+}

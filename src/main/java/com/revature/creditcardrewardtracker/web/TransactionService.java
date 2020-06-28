@@ -1,6 +1,7 @@
 package com.revature.creditcardrewardtracker.web;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
@@ -58,36 +59,42 @@ public class TransactionService {
 	public Response getCategoryTotal(@PathParam("username") String username,
 			@PathParam("category") String category) {
 		double total = t.getTotalForCategories(username, category);
-		return Response.ok(total).build();
+		double totalCashback = t.getTotalCashBackForCategories(username, category);
+		ArrayList<Double> results = new ArrayList<Double>();
+		results.add(totalCashback);
+		results.add(total);
+		return Response.ok((ArrayList<Double>)results).build();
 	}
-	
-	@GET
-	@Path("/total/cashback/category/{category}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCategoryCashBackTotal(@PathParam("username") String username,
-			@PathParam("category") String category) {
-		double total = t.getTotalCashBackForCategories(username, category);
-		return Response.ok(total).build();
-	}
-	
+		
 	@GET
 	@Path("/total/card/{cardid}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getCardTotal(@PathParam("username") String username,
 			@PathParam("cardid") int cardid) {
 		double total = t.getTotalForCard(username, cardid);
-		return Response.ok(total).build();
+		double totalCashback = t.getTotalCashBackForCard(username, cardid);
+		ArrayList<Double> results = new ArrayList<Double>();
+		results.add(totalCashback);
+		results.add(total);
+		return Response.ok((ArrayList<Double>)results).build();
 	}
 	
 	@GET
-	@Path("/total/cashback/card/{cardid}")
+	@Path("/total/date/{startdate}/{enddate}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCardCashBackTotal(@PathParam("username") String username,
-			@PathParam("cardid") int cardid) {
-		double total = t.getTotalCashBackForCard(username, cardid);
-		return Response.ok(total).build();
+	public Response getDateTotal(@PathParam("username") String username,
+			@PathParam("startdate") String startDate,
+			@PathParam("enddate") String endDate) {
+		double totalCashback = t.getTotalCashBackForDateRange(username, 
+				convertHTMLtoLocalDate(startDate), convertHTMLtoLocalDate(endDate));
+		double total = t.getTotalForDateRange(username, 
+				convertHTMLtoLocalDate(startDate), convertHTMLtoLocalDate(endDate));
+		ArrayList<Double> results = new ArrayList<Double>();
+		results.add(totalCashback);
+		results.add(total);
+		return Response.ok((ArrayList<Double>)results).build();
 	}
-	
+		
 	@DELETE
 	@Path("/remove")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -150,4 +157,11 @@ public class TransactionService {
 		return Response.status(401).build();
 	}
 	
+	private static LocalDate convertHTMLtoLocalDate(String date) {
+		// getting date from HTML to ld date from Basil Bourque at
+		// https://stackoverflow.com/questions/52410740/how-can-i-get-input-type-date-value-from-html-form-into-java-variable-and-sql
+		DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+		LocalDate ld = LocalDate.parse(date, f);
+		return ld;
+	}
 }

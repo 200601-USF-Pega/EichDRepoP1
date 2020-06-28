@@ -137,10 +137,10 @@ public class TransactionRepoDB implements ITransactionRepo {
 	}
 
 	@Override
-	public List<Transaction> listTransactionsForDateRange(String username, java.util.Date startDate, java.util.Date endDate) {
+	public List<Transaction> listTransactionsForDateRange(String username, java.time.LocalDate startDate, java.time.LocalDate endDate) {
 		List<Transaction> transactionList = new ArrayList<Transaction>();
-		java.sql.Date sqlStartDate = convertUtilToSQLDate(startDate);
-		java.sql.Date sqlEndDate = convertUtilToSQLDate(endDate);
+		java.sql.Date sqlStartDate = convertLocalToSQLDate(startDate);
+		java.sql.Date sqlEndDate = convertLocalToSQLDate(endDate);
 		try {
 			Statement s = ConnectionManager.getConnection().createStatement();
 			ResultSet rs;
@@ -151,10 +151,7 @@ public class TransactionRepoDB implements ITransactionRepo {
 					+ 	"') AS c ON t.cardid = c.cardid "
 					+	"WHERE date BETWEEN '" + sqlStartDate + "' AND '" + sqlEndDate + "';");
 			
-			transactionList = createTransactionList(rs, transactionList);
-			
-			//printResultSet(rs);
-			
+			transactionList = createTransactionList(rs, transactionList);	
 			return transactionList;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -220,11 +217,6 @@ public class TransactionRepoDB implements ITransactionRepo {
 		}
 		
 		return false;
-	}
-
-	private static java.sql.Date convertUtilToSQLDate(java.util.Date date) {
-		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-		return sqlDate;
 	}
 	
 	private static java.sql.Date convertLocalToSQLDate(java.time.LocalDate date) {
