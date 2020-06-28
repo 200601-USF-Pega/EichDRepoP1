@@ -12,14 +12,6 @@ import com.revature.creditcardrewardtracker.models.Transaction;
 class TransactionTest {
 	
 	Transaction testTransaction = new Transaction();
-
-	/*@Test
-	void testSetAndGetDate() {
-		java.util.Date date = new java.util.Date();
-		date.setTime(20010101);
-		testTransaction.setDate(date);
-		assertEquals(date, testTransaction.getDate());
-	}*/
 	
 	@Test
 	void testSetAndGetCardId() {
