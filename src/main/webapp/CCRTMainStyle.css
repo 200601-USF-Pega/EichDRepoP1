@@ -26,15 +26,25 @@ h1 {
     font-family: 'Bebas Neue', sans-serif;
 }
 
+h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    padding-top:10px;
+    padding-bottom: 5px;
+}
+
 h3 {
     font-family: 'Roboto', sans-serif;
     font-size: large;
+    text-align: center;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .bod {
     padding-left: 20px;
     padding-right: 5px;
     font-family: 'Roboto', sans-serif;
+    padding-top: 10px;
 }
 
 img {

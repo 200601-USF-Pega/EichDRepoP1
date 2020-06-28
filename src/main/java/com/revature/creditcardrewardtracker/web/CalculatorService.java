@@ -1,37 +1,41 @@
-package com.revature.creditcardrewardtracker.service;
+package com.revature.creditcardrewardtracker.web;
 
-import java.sql.Connection;
 import java.util.List;
-import java.util.Scanner;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
-import com.revature.creditcardrewardtracker.models.CreditCardReward;
 import com.revature.creditcardrewardtracker.models.CreditCard;
+import com.revature.creditcardrewardtracker.models.CreditCardReward;
+import com.revature.creditcardrewardtracker.service.ValidationService;
 
+@Path("/CalculatorService/{username}")
 public class CalculatorService {
 	
-	private List<CreditCard> cards;
-	private InputValidationService inputValidation;
 	private ValidationService validation;
-	private String username;
+	private ICreditCardRepo ccr;
 	
-	public CalculatorService(Connection connection, String username, Scanner sc) {
-		ICreditCardRepo ccr = new CreditCardRepoDB();
-		cards = ccr.getCreditCards(username);
-		inputValidation = new InputValidationService(sc);
+	public CalculatorService() {
+		ccr = new CreditCardRepoDB();
 		validation = new ValidationService();
-		this.username = username;
 	}
 	
-	public void selectBestCard() {
-		
-		System.out.println("Please enter the category of the purchase.");
-		String category = inputValidation.getValidStringInput();
+	@GET
+	@Path("/card/{category}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response selectBestCard(@PathParam("username") String username,
+			@PathParam("category") String category) {				
 		
 		String bestCard = null;
 		double bestRate = 0.00;
-		
+		List<CreditCard> cards = ccr.getCreditCards(username);
+	
 		for (int i = 0; cards.size() > i; i++) {
 			CreditCard tempCard = cards.get(i);
 			for (int j = 0; tempCard.getCardCashBackCategories().size() > j; j++) {
@@ -45,30 +49,31 @@ public class CalculatorService {
 				}
 			}
 		}
+		String statement = "";
 		if (bestRate > 0.00) {
-			System.out.println("The best card for " + category + " is " + bestCard + " at the rate of " + (bestRate*100) + "%.");
+			statement = "The best card for " + category + " is the " + bestCard + " at the rate of " + (bestRate*100) + "%.";
 		} else {
-			System.out.println("No cards were found with a cashback category of " + category + ".");
+			statement = "No cards were found with a cashback category of " + category + ".";
 		}
-		
+		return Response.ok(statement).build();
 	}
 	
-	public void calculatePercentageBack() {
-		
-		System.out.println("Which of the following cards do you plan on using? Please enter the Card ID.");
-		for (CreditCard c : cards) {
-			System.out.println(c.stringNameAndId());
-		}
-		int cardNumber = inputValidation.getValidInt();
+	@GET
+	@Path("/rate/{cardid}/{category}/{total}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response calculatePercentageBack(@PathParam("username") String username,
+			@PathParam("cardid") Integer cardNumber,
+			@PathParam("category") String category,
+			@PathParam("total") double total) {
+
 		boolean belongsToUser = validation.permissionToModifyCard(username, cardNumber);
+		List<CreditCard> cards = ccr.getCreditCards(username);
+		String quote = "";
 		
 		if (belongsToUser == true) {
 			for (int i = 0; cards.size() > i; i++) {
 				CreditCard tempCard = cards.get(i);
 				if (tempCard.getCreditCardID() == cardNumber) {
-					System.out.println("What is the category of the purchase?");
-					String category = inputValidation.getValidStringInput();
-					
 					double bestRate = 0.00;
 					for (int j = 0; tempCard.getCardCashBackCategories().size() > j; j++) {
 						List<CreditCardReward> tempCategoriesList = tempCard.getCardCashBackCategories();
@@ -79,17 +84,15 @@ public class CalculatorService {
 							}
 						}
 					}
-					
-					System.out.println("How much do you plan on spending?");
-					double total = inputValidation.getValidDouble();
 					double savings = total*bestRate;
 					double adjustedPrice = total - savings;
 					
-					System.out.println("Using your " + tempCard.getCreditCardName() + " card will save you $" + savings + " for an adjusted total of $" + adjustedPrice + ".");
-					
+					quote = "Using your " + tempCard.getCreditCardName() + " card will save you $" + savings + " for an adjusted total of $" + adjustedPrice + ".";
+					return Response.ok(quote).build();
 				}
 			}
 		}
+		return Response.ok(quote).build();
 	}
 
 }

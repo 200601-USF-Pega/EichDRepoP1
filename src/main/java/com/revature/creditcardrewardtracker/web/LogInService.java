@@ -19,7 +19,7 @@ import com.revature.creditcardrewardtracker.service.ValidationService;
 @Path("/LogInService")
 public class LogInService {
 	
-	private static final Logger logger = Logger.getLogger(LogInService.class);
+	private static final Logger log = Logger.getLogger(LogInService.class);
 
 	
 	private IUserRepo d;
@@ -41,8 +41,8 @@ public class LogInService {
 				if (this.adminVerification(username)) {
 					return Response.status(303).build();
 				}
-				logger.info("User " + user + " successfully logged in.");
-	    		System.out.println(username + " logged in successfully.");
+				log.info("User " + user.getUsername() + " successfully logged in.");
+	    		//System.out.println(username + " logged in successfully.");
 				return Response.status(302).build();
 			}
 		} else {
@@ -53,8 +53,8 @@ public class LogInService {
 	
 	public boolean adminVerification(String username) {
 		if(d.checkAdmin(username)){
-			System.out.println("Admin " + username + " successfully logged in.");
-			logger.info("User " + username + " logged in as an admin.");
+			//System.out.println("Admin " + username + " successfully logged in.");
+			log.info("User " + username + " logged in as an admin.");
 			return true;
 		}
 		return false;

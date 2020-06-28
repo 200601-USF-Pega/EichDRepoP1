@@ -8,6 +8,85 @@
     <link rel="stylesheet" href="CCRTMainStyle.css">
     <link rel="stylesheet" href="CCRTPageStyle.css">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto&display=swap" rel="stylesheet">
+
+    <script>
+        
+        var category = [];
+        var username = sessionStorage.getItem("username");
+
+        function bestCard() {
+            var xhttp = new XMLHttpRequest();
+            var category = document.querySelector("#categoryVal").value;
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199) {
+                    document.querySelectorAll("#categoryTable tbody tr").forEach(function(e){e.remove()});
+
+                    category = this.responseText;
+                    let table = document.querySelector("#categoryTable tbody");
+
+                    for (let i = 0; i < 1; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let responseCell = row.insertCell(0); 
+                        responseCell.innerHTML = category;
+                    }
+                }
+            };
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CalculatorService/"+username+"/card/"+category;
+            xhttp.open("GET", getURL , true);
+            xhttp.send();
+        }
+
+        function calculator() {
+            var xhttp = new XMLHttpRequest();
+            var category = document.querySelector("#categoryCalc").value;
+            var total = document.querySelector("#totalCalc").value;
+            var cardid = document.querySelector("#cardID").value;
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199) {
+                    document.querySelectorAll("#calculator tbody tr").forEach(function(e){e.remove()});
+
+                    statement = this.responseText;
+                    let table = document.querySelector("#calculator tbody");
+
+                    for (let i = 0; i < 1; ++i) {
+                        let row = table.insertRow(table.rows.length);
+
+                        let responseCell = row.insertCell(0); 
+                        responseCell.innerHTML = statement;
+                    }
+                }
+            };
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CalculatorService/"+username+"/rate/"+cardid+"/"+category+"/"+total;
+            xhttp.open("GET", getURL , true);
+            xhttp.send();
+        }
+
+        function getAllCards() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status > 199) {
+                    document.querySelectorAll("#cardForm select option").forEach(function(e){e.remove()});
+
+                    cards = JSON.parse(this.responseText);
+
+                    /* Select form adapted from James Long at https://stackoverflow.com/questions/6601028/how-to-populate-the-options-of-a-select-element-in-javascript */
+                    let select = document.querySelector("#cardForm select");
+                    for (let i = 0; i < cards.length; ++i) {
+                        var cardNameID = cards[i].creditCardID+" - "+cards[i].creditCardName;
+                        let option = document.createElement('option');
+                        option.setAttribute('value', cards[i].creditCardID);
+                        option.appendChild(document.createTextNode(cardNameID));
+                        select.appendChild(option);
+                    }
+                }
+            };
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CreditCardService/"+username+"/all";
+            xhttp.open("GET", getURL , true);
+            xhttp.send();
+        }
+    </script>
 </head>
 <header>
     <!--Navigation bar adapted from: https://www.w3schools.com/bootstrap/bootstrap_navbar.asp-->
@@ -32,6 +111,44 @@
     </div>
 </header>
 <body>
-
+    <div>
+        <h2>
+            Card Selector
+        </h2>
+        <h3>This handy tool will help you pick the best credit card to use for an upcoming purchase. Just enter in the category below and we'll handle the rest!</h3>
+        <div class="bod">
+            <input type="text" id="categoryVal" placeholder="Category of Purchase">
+            <input type="button" id="inpButton" value="Search" onClick="bestCard()"/>
+            <table id="categoryTable">
+                <tbody>
+    
+                </tbody>
+            </table>
+        </div>
+        <h2>
+           Calculate Potential Savings 
+        </h2>
+        <h3>The tool below can automatically calculate the price you'll pay after savings from a card. Fill out the information below to get started.</h3>
+        <div class="bod">
+            <form id="cardForm">
+                <label for="cards">Credit Card:</label>
+                <select name="card" id="cardID" required>
+                    
+                </select>
+                <input type="button" onClick="getAllCards()" value="Refresh">
+            </form>
+            <form>
+                <input type="text" id="categoryCalc" placeholder="Category of Purchase" required>
+                <input type="number" id="totalCalc" placeholder="Estimated Total" required>
+                <input type="button" id="inpButton" value="Calculate" onClick="calculator()"/>
+            </form>
+            <table id="calculator">
+                <tbody>
+    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 </body>
 </html>
