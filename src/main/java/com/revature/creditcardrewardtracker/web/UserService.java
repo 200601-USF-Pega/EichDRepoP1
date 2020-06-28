@@ -34,14 +34,15 @@ private static final Logger logger = Logger.getLogger(LogInService.class);
 		UserTool tool = new UserTool();
 		user = tool.createNewUser(username, password, password);
 		
-		if (user.getUsername()!=null) {
+		if (user.getUsername()!=null && user.getPassword()!=null) {
 			d.addUser(user);
-			logger.info("User " + user + " successfully created.");
+			logger.info("User " + user.getUsername() + " successfully created.");
     		System.out.println(username + " logged in successfully.");
     		return Response.status(302).build();
 
 		} else {
 			System.out.println("User not created. Please try again.");
+			logger.warn("User " + user.getUsername() + " creation failed.");
 			return Response.status(403).build();
 		}
 	}

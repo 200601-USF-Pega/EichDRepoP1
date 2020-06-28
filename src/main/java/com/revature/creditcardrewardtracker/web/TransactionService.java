@@ -15,6 +15,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
+
 import com.revature.creditcardrewardtracker.dao.ITransactionRepo;
 import com.revature.creditcardrewardtracker.dao.TransactionRepoDB;
 import com.revature.creditcardrewardtracker.models.Transaction;
@@ -27,7 +29,8 @@ public class TransactionService {
 	private ITransactionRepo d;
 	private TransactionTool t;
 	private ValidationService validation;
-
+	
+	private static final Logger log = Logger.getLogger(LogInService.class);
 	
 	public TransactionService() {
 		d = new TransactionRepoDB();
@@ -104,6 +107,7 @@ public class TransactionService {
 			d.deleteTransaction(transactionID);
 			return Response.status(201).build();
 		}
+		log.info("User " + username + " attempted to remove a transaction they'd don't have access too.");
 		return Response.status(401).build();
 	}
 	
@@ -118,6 +122,7 @@ public class TransactionService {
 				d.updateTransaction(rTransaction.getTransactionId(), 1, ld);
 				return Response.status(201).build();
 			}
+			log.info("User " + username + " attempted to access a transaction they'd don't have access too.");
 			return Response.status(401).build();
 	}
 	
@@ -130,6 +135,7 @@ public class TransactionService {
 			d.updateTransaction(rTransaction.getTransactionId(), 2, rTransaction.getCategory());
 			return Response.status(201).build();
 		}
+		log.info("User " + username + " attempted to access a transaction they'd don't have access too.");
 		return Response.status(401).build();
 	}
 	
@@ -142,6 +148,7 @@ public class TransactionService {
 			d.updateTransaction(rTransaction.getTransactionId(), 3, rTransaction.getTotal());
 			return Response.status(201).build();
 		}
+		log.info("User " + username + " attempted to access a transaction they'd don't have access too.");
 		return Response.status(401).build();
 	}
 	
@@ -154,6 +161,7 @@ public class TransactionService {
 			d.updateTransaction(rTransaction.getTransactionId(), 4, rTransaction.getCardID());
 			return Response.status(201).build();
 		}
+		log.info("User " + username + " attempted to access a transaction they'd don't have access too.");
 		return Response.status(401).build();
 	}
 	

@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
+
 import com.revature.creditcardrewardtracker.dao.CreditCardRepoDB;
 import com.revature.creditcardrewardtracker.dao.ICreditCardRepo;
 import com.revature.creditcardrewardtracker.models.CreditCard;
@@ -23,6 +25,8 @@ public class CreditCardService {
 
 	private ICreditCardRepo d;
 	private ValidationService validation;
+	
+	private static final Logger log = Logger.getLogger(LogInService.class);
 
 	public CreditCardService() {
 		d = new CreditCardRepoDB();
@@ -53,6 +57,7 @@ public class CreditCardService {
 			d.deleteCard(creditCardID);
 			return Response.status(201).build();
 		}
+		log.info("User " + username + " attempted to remove a credit card they'd don't have access too.");
 		return Response.status(401).build();
 	}
 
@@ -71,6 +76,7 @@ public class CreditCardService {
 				System.out.println(id + " not updated.");
 			}
 		}
+		log.info("User " + username + " attempted to modify a credit card they'd don't have access too.");
 		return Response.status(401).build();
 	}
 

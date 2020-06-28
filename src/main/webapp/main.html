@@ -44,6 +44,13 @@
             var cardid = document.querySelector("#cardID").value;
 
             xhttp.onreadystatechange = function() {
+                if (cardid == undefined) {
+                    alert("Card selection cannot be left blank.")
+                } else if (category == undefined) {
+                    alert("Category field cannot be left blank.")
+                } else if (total == undefined) {
+                    alert("Total field cannot be left blank.")
+                } 
                 if (this.readyState == 4 && this.status > 199) {
                     document.querySelectorAll("#calculator tbody tr").forEach(function(e){e.remove()});
 
@@ -203,7 +210,7 @@
         </h2>
         <h3>This handy tool will help you pick the best credit card to use for an upcoming purchase. Just enter in the category below and we'll handle the rest!</h3>
         <div class="bod">
-            <input type="text" id="categoryVal" placeholder="Category of Purchase">
+            <input type="text" id="categoryVal" placeholder="Category of Purchase" required>
             <input type="button" id="inpButton" value="Search" onClick="bestCard()"/>
             <table id="categoryTable">
                 <tbody>

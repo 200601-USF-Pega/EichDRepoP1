@@ -46,7 +46,9 @@ public class LogInService {
 			}
 		} else {
 			System.out.println("Username" + username + " not found. Please try again.");
+			log.info("Username " + user.getUsername() + " was not found.");
 		}
+		log.warn("User " + user.getUsername() + " failed to log in.");
 		return Response.status(403).build();
 	}
 	

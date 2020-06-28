@@ -34,12 +34,7 @@ public class TransactionTool {
 			return transaction;
 		}
 
-		// getting date from HTML to ld date from Basil Bourque at
-		// https://stackoverflow.com/questions/52410740/how-can-i-get-input-type-date-value-from-html-form-into-java-variable-and-sql
-		DateTimeFormatter f = DateTimeFormatter.ofPattern("uuuu-MM-dd");
-		LocalDate ld = LocalDate.parse(date, f);
-
-		transaction.setDate(ld);
+		transaction.setDate(this.getLDFromStringDate(date));
 		transaction.setCategory(category.toUpperCase());
 		transaction.setTotal(total);
 		transaction.setCashBackTotal(this.calculateCashBack(transaction, username));
