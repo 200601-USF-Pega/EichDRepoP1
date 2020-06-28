@@ -18,7 +18,7 @@
             var xhttp = new XMLHttpRequest();
             var category = document.querySelector("#categoryVal").value;
             xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status > 199) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelectorAll("#categoryTable tbody tr").forEach(function(e){e.remove()});
 
                     category = this.responseText;
@@ -32,7 +32,7 @@
                     }
                 }
             };
-            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CalculatorService/"+username+"/card/"+category;
+            var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CalculatorService/"+username+"/card/"+category+"/select";
             xhttp.open("GET", getURL , true);
             xhttp.send();
         }
@@ -42,16 +42,9 @@
             var category = document.querySelector("#categoryCalc").value;
             var total = document.querySelector("#totalCalc").value;
             var cardid = document.querySelector("#cardID").value;
-
+            
             xhttp.onreadystatechange = function() {
-                if (cardid == undefined) {
-                    alert("Card selection cannot be left blank.")
-                } else if (category == undefined) {
-                    alert("Category field cannot be left blank.")
-                } else if (total == undefined) {
-                    alert("Total field cannot be left blank.")
-                } 
-                if (this.readyState == 4 && this.status > 199) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelectorAll("#calculator tbody tr").forEach(function(e){e.remove()});
 
                     statement = this.responseText;
@@ -63,6 +56,8 @@
                         let responseCell = row.insertCell(0); 
                         responseCell.innerHTML = statement;
                     }
+                } else if (this.readyState == 4 && this.status > 399) {
+
                 }
             };
             var getURL = "http://localhost:8080/CreditCardRewardTrackerWeb/tracker/CalculatorService/"+username+"/rate/"+cardid+"/"+category+"/"+total;
@@ -73,7 +68,7 @@
         function getAllCards() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status > 199) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelectorAll("#cardForm select option").forEach(function(e){e.remove()});
                     document.querySelectorAll("#cardFormSavings select option").forEach(function(e){e.remove()});
 
@@ -108,7 +103,7 @@
             var xhttp = new XMLHttpRequest();
             var cardid = document.querySelector("#cardIDSavings").value;
             xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status > 199) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelectorAll("#savings tbody tr").forEach(function(e){e.remove()});
 
                     results = JSON.parse(this.responseText);
@@ -133,7 +128,7 @@
             var xhttp = new XMLHttpRequest();
             var category = document.querySelector("#categorySavings").value;
             xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status > 199) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelectorAll("#savings tbody tr").forEach(function(e){e.remove()});
 
                     results = JSON.parse(this.responseText);
@@ -159,7 +154,7 @@
             var startDate = document.querySelector("#startDate").value;
             var endDate = document.querySelector("#endDate").value;
             xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status > 199) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelectorAll("#savings tbody tr").forEach(function(e){e.remove()});
 
                     results = JSON.parse(this.responseText);
@@ -232,7 +227,7 @@
             </form>
             <form>
                 <input type="text" id="categoryCalc" placeholder="Category of Purchase" required>
-                <input type="number" id="totalCalc" placeholder="Estimated Total" required>
+                <input type="number" id="totalCalc" placeholder="Estimated Total" required min="1">
                 <input type="button" id="inpButton" value="Calculate" onClick="calculator()"/>
             </form>
             <table id="calculator">

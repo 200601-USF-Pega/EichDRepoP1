@@ -17,7 +17,7 @@
         function getAllTransactions() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status > 199) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelectorAll("#transactionTable tbody tr").forEach(function(e){e.remove()});
                     document.querySelectorAll("#transactionForm select option").forEach(function(e){e.remove()});
 
@@ -67,7 +67,7 @@
         function getAllCards() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status > 199) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelectorAll("#cardForm select option").forEach(function(e){e.remove()});
                     document.querySelectorAll("#newCardForm select option").forEach(function(e){e.remove()});
 
@@ -109,7 +109,7 @@
 
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
-                if (this.readyState > 3) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelector("#cardID").value = "";
                     document.querySelector("#category").value = "";
                     document.querySelector("#purchasedate").value = "";
@@ -130,7 +130,7 @@
 
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
-                if (this.readyState > 3) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelector("#transactionID").value = "";
                 }
             }
@@ -149,7 +149,7 @@
 
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
-                if (this.readyState > 3) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelector("#newCategory").value = "";
                     document.querySelector("#transactionID").value = "";
                 }
@@ -169,7 +169,7 @@
 
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
-                if (this.readyState > 3) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelector("#newDate").value = "";
                     document.querySelector("#transactionID").value = "";
                 }
@@ -189,7 +189,7 @@
 
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
-                if (this.readyState > 3) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelector("#newCardID").value = "";
                     document.querySelector("#transactionID").value = "";
                 }
@@ -209,7 +209,7 @@
 
             var req = new XMLHttpRequest();
             req.onreadystatechange = function() {
-                if (this.readyState > 3) {
+                if (this.readyState == 4 && this.status > 199 && this.status < 400) {
                     document.querySelector("#newTotal").value = "";
                     document.querySelector("#transactionID").value = "";
                 }

@@ -37,6 +37,10 @@ public class CreditCardService {
 	@Path("/new")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addCreditCard(@PathParam("username") String username, CreditCard card) {
+		if (card.getCreditCardName().isBlank()) {
+			System.out.println("Credit card name cannot be blank");
+			return Response.status(400).build();
+		}
 		d.addCreditCard(username, card);
 		// returns http response
 		return Response.status(201).build();
@@ -66,6 +70,10 @@ public class CreditCardService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateCardName(@PathParam("username") String username, CreditCard card) {
 		int id = card.getCreditCardID();
+		if (card.getCreditCardName().isBlank()) {
+			System.out.println("Credit card name cannot be blank");
+			return Response.status(400).build();
+		}
 		if (validation.permissionToModifyCard(username, id)) {
 			String newName = card.getCreditCardName();
 			boolean result = d.updateCard(id, newName);

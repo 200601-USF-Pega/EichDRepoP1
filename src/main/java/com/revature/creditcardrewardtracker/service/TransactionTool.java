@@ -26,7 +26,11 @@ public class TransactionTool {
 
 	public Transaction createNewTransaction(int cardID, String date, String category, double total,
 			String username) {
-
+		
+		if (cardID <= 0 || date.isEmpty() || category.isEmpty() || total <= 0) {
+			return null;
+		}
+		
 		Transaction transaction = new Transaction();
 		if (validation.permissionToModifyCard(username, cardID)) {
 			transaction.setCardID(cardID);

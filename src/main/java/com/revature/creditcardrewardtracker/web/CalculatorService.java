@@ -27,10 +27,14 @@ public class CalculatorService {
 	}
 	
 	@GET
-	@Path("/card/{category}")
+	@Path("/card/{category}/select")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response selectBestCard(@PathParam("username") String username,
 			@PathParam("category") String category) {				
+		if (category.isBlank()) {
+			System.out.println("Card Selector category cannot be blank");
+			return Response.status(400).build();
+		}
 		
 		String bestCard = null;
 		double bestRate = 0.00;
@@ -66,6 +70,11 @@ public class CalculatorService {
 			@PathParam("category") String category,
 			@PathParam("total") double total) {
 
+		if (cardNumber <= 0 || category.isBlank() || total <= 0) {
+			System.out.println("Invalid inputs for calculator");
+			return Response.status(400).build();
+		}
+		
 		boolean belongsToUser = validation.permissionToModifyCard(username, cardNumber);
 		List<CreditCard> cards = ccr.getCreditCards(username);
 		String quote = "";
